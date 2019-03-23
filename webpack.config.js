@@ -156,7 +156,7 @@ module.exports = {
 					loader: 'resolve-url-loader'
 				},
 				{
-					loader: 'less-loader',
+					loader: 'sass-loader',
 					options: {
 						javascriptEnabled: true,
 						sourceMap: !isProduction

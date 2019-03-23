@@ -1,5 +1,5 @@
 import * as React from 'react'
-import './index.less'
+import './index.scss'
 import { Header, Footer } from '@layouts/index'
 import { Icon, Layout, Menu } from 'antd'
 const { Sider, Content } = Layout
@@ -12,7 +12,6 @@ import {
   Switch
 } from 'react-router-dom'
 
-// import { Header, Footer } from '@layouts/index'
 const Admin = ({ match }) => {
   return (
     <Layout>

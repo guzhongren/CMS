@@ -1,5 +1,5 @@
 import * as React from 'react'
-import './index.less'
+import './index.scss'
 import Config from '@config/index'
 import { Header, Footer } from '@layouts/index'
 

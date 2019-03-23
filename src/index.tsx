@@ -5,7 +5,7 @@ import Pages from '@pages/index'
 import { LocaleProvider } from 'antd'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import 'moment/locale/zh-cn'
-import './index.less'
+import './index.scss'
 ReactDOM.render(
 	<LocaleProvider locale={zh_CN}><Pages /></LocaleProvider>,
 	document.getElementById('root') as HTMLElement

@@ -1,4 +1,4 @@
-@import './theme/theme.scss';
+@import '@theme/theme.scss';
 
 *::-webkit-scrollbar {
 	width: 8px;
@@ -14,7 +14,7 @@ body,
 #root {
   margin: 0;
   padding: 0;
-  font-family: Microsoft Yahei !important;
+  font-family: Roboto,Arial,sans-serif;
   font-variant-numeric: tabular-nums;
   font-size: 14px;
   width: 100%;

@@ -1,0 +1,24 @@
+@import '../../theme/theme.less';
+
+.adminHeader {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: @front-color;
+  box-shadow: @box-shadow-base;
+
+  .tool {
+    padding: 8px;
+    &:hover {
+      cursor: pointer;
+      color: @theme-font-color3;
+    }
+    .logStatus {
+      margin-right: 30px;
+      font-size: 16px;
+    }
+  }
+
+}

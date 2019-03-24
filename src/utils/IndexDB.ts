@@ -5,7 +5,7 @@ export default class IndexDB  {
   tableName: string
   permission: string
   private dbInstance: IndexDB | null
-  constructor(dbName = 'Platform', dbVersion = 2018, tableName = 'history', permission = 'readwrite') {
+  constructor(dbName = 'summitweb', dbVersion = 2018, tableName = 'history', permission = 'readwrite') {
     this.dbName = dbName
     this.dbVersion = dbVersion
     this.tableName = tableName
@@ -44,7 +44,7 @@ export default class IndexDB  {
           openRequest.onsuccess = (evt: any) => {
             // console.log('数据库打开成功...')
             const db1 = evt.target.result
-            db1.transaction([this.tableName], this.permission) // 返回一个事务对象
+            db1.transaction([this.tableName], this.permission) // 返回一个事务对象 
             this.dbInstance = db1
             resolve2(db1)
           }

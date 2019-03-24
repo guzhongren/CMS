@@ -29,10 +29,12 @@
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
       "@utils/*": ["./src/utils/*"],
+      "@stories/*": ["./src/stories/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@api/*": ["./src/api/*"],
       "@assets/*": ["./src/assets/*"],
       "@theme/*": ["./src/theme/*"],
+      
     }
   },
   "include": [
@@ -40,8 +42,7 @@
   ],
   "exclude": [
     "node_modules",
-	"build",
-	"docs",
+    "build",
     "scripts",
     "acceptance-tests",
     "webpack",
@@ -50,5 +51,6 @@
     "webpack.config.js",
     "webpack.vendor.js",
     "postcss.config.js",
+    "public/dist"
   ]
 }

@@ -1,9 +1,11 @@
 import * as React from 'react'
-import './index.scss'
-import { Header, Footer } from '@layouts/index'
+import './index.less'
+import { AdminHeader, Footer } from '@layouts/index'
 import { Icon, Layout, Menu } from 'antd'
 const { Sider, Content } = Layout
 const SubMenu = Menu.SubMenu
+import logo from './img/logo.png'
+
 import {
   NavLink,
   Redirect,
@@ -16,14 +18,10 @@ const Admin = ({ match }) => {
   return (
     <Layout>
       <Sider className={'layout-sider'} theme='dark' width='256px'>
+        <NavLink to='/admin' className={'logoContainer'}>
+          <img className='logo' src={logo} />
+        </NavLink>
         <Menu theme='dark' defaultSelectedKeys={[match.url]} mode='inline'>
-          <Menu.Item key='11'>
-            <NavLink to='/admin'>
-              <Icon type='smile-o' />
-              Logo
-            </NavLink>
-          </Menu.Item>
-
           <SubMenu
             key='sub1'
             title={<span><Icon type='user' /><span>User</span></span>}
@@ -46,7 +44,7 @@ const Admin = ({ match }) => {
         </Menu>
       </Sider>
       <Layout>
-        <Header />
+        <AdminHeader />
         <Content>
           <Switch>
             <Route path={`${match.url}/:type`} component={AdminContent} />
@@ -56,15 +54,14 @@ const Admin = ({ match }) => {
         </Content>
         <Footer />
       </Layout>
-
     </Layout>
   )
 }
 const Index = () => (
-  <div>Hello Admin</div>
+  <div>Hello Admin Dashboard</div>
 )
 const AdminContent = ({ match }) => {
-  let willLoadingComponent : any
+  let willLoadingComponent: any
   switch (match.params.type) {
     case 'user':
       willLoadingComponent = Detail
@@ -89,15 +86,15 @@ const AdminContent = ({ match }) => {
  * 子路由中套子路由
  * @param param0
  */
-const Team = ({match}) => {
+const Team = ({ match }) => {
   return (
     <React.Fragment>
-    <div>{`team iD: ${match.params.detail}`}</div>
-    <h3><Link to={`${match.url}/guzhongren`}>Show Leader</Link></h3>
-    <Switch>
-      <Route path={`${match.url}/:name`} component={ShowLeader} />
-      {/* <Redirect to={`${match.url}`} /> */}
-    </Switch>
+      <div>{`team iD: ${match.params.detail}`}</div>
+      <h3><Link to={`${match.url}/guzhongren`}>Show Leader</Link></h3>
+      <Switch>
+        <Route path={`${match.url}/:name`} component={ShowLeader} />
+        {/* <Redirect to={`${match.url}`} /> */}
+      </Switch>
     </React.Fragment>
   )
 }
@@ -110,5 +107,4 @@ const Detail = ({ match }) => {
     <div>{`Hello User iD: ${match.params.detail}`}</div>
   )
 }
-
 export default Admin

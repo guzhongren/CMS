@@ -1,9 +1,9 @@
 import * as React from 'react'
 import './index.less'
-import { Menu, Icon} from 'antd'
-import {NavLink} from 'react-router-dom'
+import { Menu, Icon } from 'antd'
+import { NavLink } from 'react-router-dom'
+import logo from './img/logo.png'
 import Config from '@config/index'
-
 
 interface IState {
   current?: string
@@ -14,13 +14,11 @@ export interface IProps {
   theme?: any
   // style?: any
 }
-
 export default class NavBar extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    const tab  = /\/(\w+)[\/]?$/.exec(window.location.href)
     this.state = {
-      current: (tab !== null && (tab as string[]).length > 0) ? (tab as string[])[1] : 'home'
+      current: 'home'
     }
   }
   handleClick = (e) => {
@@ -38,7 +36,7 @@ export default class NavBar extends React.Component<IProps, IState> {
         <Menu theme={this.props.theme} style={menuStyle} onClick={this.handleClick} selectedKeys={[this.state.current!]} mode='horizontal'>
           <Menu.Item key='home1'>
             <NavLink  to='/'>
-              <h3>{Config.projectName}</h3>
+              <img className='logo' src={logo} alt={Config.projectName}/>
             </NavLink>
           </Menu.Item>
           <Menu.Item key='home'>
@@ -47,16 +45,28 @@ export default class NavBar extends React.Component<IProps, IState> {
               主页
             </NavLink>
           </Menu.Item>
-          <Menu.Item key='test'>
+          <Menu.Item key='map'>
+            <NavLink  to='/map'>
+              <Icon type='environment' />
+              地图
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key='demo'>
+            <NavLink  to='/demo'>
+              <Icon type='appstore-o'/>
+              Demo示例
+            </NavLink>
+          </Menu.Item> 
+          <Menu.Item  key='admin' >
+            <NavLink to='/admin'>
+            <Icon type='smile-o' />
+              Admin
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key='11'>
             <NavLink  to='/test'>
               <Icon type='smile-o' />
               404
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key='admin'>
-            <NavLink  to='/admin'>
-              <Icon type='smile-o' />
-              后台
             </NavLink>
           </Menu.Item>
         </Menu>

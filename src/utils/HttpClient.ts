@@ -45,26 +45,24 @@ function apiAxios(method, url, params) {
       method,
       url,
       data: method === 'POST' || method === 'PUT' ? params : null,
-      params: method === 'GET' || method === 'DELETE' || method === 'PATCH' ? params : null,
+      params: method === 'GET' || method === 'DELETE' ? params : null,
       withCredentials: false
     })
       .then((res) => {
         if (res.status === 200) {
           const data = res.data
-          if (data.code === '200') {
+          if (data.success ===  true) {
             data.data ? resolve(data.data) : resolve(true)
           } else {
             // console.error('服务器状态不对', data)
-            reject('服务器状态不对')
-            // window.location.href = '#/login'
+            reject({error: data})
           }
         } else {
-          // console.log('Axios返回状态不对，查看请求处理过程．．．．')
+          console.log('Axios返回状态不对，查看请求处理过程．．．．')
           reject('Axios返回状态不对，查看请求处理过程．．．．')
         }
       }, err => {
         reject(err)
-        window.location.href = '#/login'
       })
       .catch((err) => {
         const errInfo = { 'err': err.response }
@@ -84,8 +82,5 @@ export default {
   },
   delete: (url, params) => {
     return apiAxios('DELETE', url, params)
-  },
-  patch: (url, params) => {
-    return apiAxios('PATCH', url, params)
   }
 }

@@ -88,7 +88,7 @@
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-draggable": "^3.0.5",
-    "react-icons": "^2",
+    "react-icons": "^3.5.0",
     "react-router-dom": "^5.0.0"
   },
   "devDependencies": {

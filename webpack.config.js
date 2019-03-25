@@ -13,6 +13,7 @@ const {
   GenerateSW
 } = require('workbox-webpack-plugin')
 const publicUrl = '/'
+const buildTarget = './dist/'
 module.exports = {
   mode: isProduction ? 'production' : 'development',
   entry: {
@@ -21,7 +22,7 @@ module.exports = {
   output: {
     filename: 'static/js/[name]_bundle.js',
     chunkFilename: 'static/js/[name]_bundle.js',
-    path: path.resolve(__dirname, './build/'),
+    path: path.resolve(__dirname, buildTarget),
     publicPath: publicUrl
   },
   devServer: {
@@ -178,7 +179,7 @@ module.exports = {
   ].concat(!isProduction ? [
     new webpack.HotModuleReplacementPlugin()
   ] : [
-    new CleanWebpackPlugin('./build'),
+    new CleanWebpackPlugin(),
     new WebpackParallelUglifyPlugin({
       uglifyES: {
         mangle: false,
@@ -237,19 +238,19 @@ module.exports = {
     }),
     new CopyWebpackPlugin([{
       from: './public/config.js',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, buildTarget),
       toType: 'dir'
     }, {
       from: './public/manifest.json',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, buildTarget),
       toType: 'dir'
     }, {
       from: './public/icon.png',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, buildTarget),
       toType: 'dir'
     }, {
       from: './public/favicon.ico',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, buildTarget),
       toType: 'dir'
     }]),
     new GenerateSW({

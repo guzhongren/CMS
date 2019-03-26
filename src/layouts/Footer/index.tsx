@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FaHeart } from 'react-icons/lib/fa'
+import { FaHeart } from 'react-icons/fa'
 import './index.less'
 export default class BasicFooter extends React.Component {
   render() {

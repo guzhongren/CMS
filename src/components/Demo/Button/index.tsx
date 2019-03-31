@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const Button = (props: IProps) => ( 
-    <button className={props.className} type={props.type} style={props.style} onClick={props.onClick} >
+    <button className={props.className} style={props.style} onClick={props.onClick} >
     {props.children}
     </button>
   )

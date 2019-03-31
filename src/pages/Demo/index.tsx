@@ -226,7 +226,7 @@ class App extends React.Component<IProps, IState> {
           <Breadcrumb.Item><a >Application List</a></Breadcrumb.Item>
           <Breadcrumb.Item>An Application</Breadcrumb.Item>
         </Breadcrumb>
-        <h3>分割线哈<Icon type='link' /><Button type='primary' icon='search'> <Icon type='github' />Search</Button></h3>
+        <h3>分割线哈<Icon type='link' /></h3>
         <MaterialButton variant='contained' color='primary'>
           Hello World
         </MaterialButton>

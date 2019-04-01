@@ -1,0 +1,18 @@
+cms:
+  app:
+    addr: ":1234"
+    cors_origins:
+      - http://localhost:8080
+      - http://127.0.0.1:8080
+    staticPath: 
+      http: /static
+      local: assets
+  db:
+    host: 127.0.0.1
+    port: 5432
+    username: postgres
+    password: 000000
+    db: cms
+  version: v1
+  secret: secret
+  salt: guzhongren

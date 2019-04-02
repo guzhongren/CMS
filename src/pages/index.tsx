@@ -13,6 +13,7 @@ const Pages = () => {
             <Route exact path='/' component={Index} />
             <Route path='/map' component={Map} />
             <Route path='/admin' component={Admin} />
+            <Route path='/login' component={Login} />
             <Route component={NoMatch} />
           </Switch>
         </React.Fragment>
@@ -39,6 +40,13 @@ const Admin = (props) => {
 }
 const Map = (props) => {
   return <DynamicImport load={() => import(`@pages/Map/index`)}>
+    {(Component: any) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+}
+const Login = (props) => {
+  return <DynamicImport load={() => import(`@pages/Login/index`)}>
     {(Component: any) => Component === null
       ? <Loading />
       : <Component {...props} />}

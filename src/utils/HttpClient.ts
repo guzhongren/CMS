@@ -46,9 +46,13 @@ function apiAxios(method, url, params) {
       url,
       data: method === 'POST' || method === 'PUT' ? params : null,
       params: method === 'GET' || method === 'DELETE' ? params : null,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       withCredentials: false
     })
       .then((res) => {
+        console.log(res)
         if (res.status === 200) {
           const data = res.data
           if (data.success ===  true) {

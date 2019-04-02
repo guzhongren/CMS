@@ -1,10 +1,17 @@
 // @author 谷中仁
 import HttpClient from '@utils/HttpClient'
 
-const defaultLoginParams = {
-  username: 'admin',
-  password: 'admin'
+interface ILoginParams {
+  username: string,
+  password: string
 }
-export function Login(url = `api/login`, params = defaultLoginParams) {
-  return HttpClient.post(url, params)
+const Login = (params: ILoginParams, url = `api/login`) => {
+  return HttpClient.post(url, params).then(data => {
+    return data
+  }, err => {
+    console.error(err)
+  })
+}
+export default {
+  Login
 }

@@ -20,7 +20,6 @@ export default class LoginComponent extends React.Component<any, IState> {
   }
   handleSubmit = (e) => {
     e.preventDefault()
-    console.log(e)
     if (this.state.username && this.state.password) {
       const params = {
         username: this.state.username,

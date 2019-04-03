@@ -41,13 +41,10 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '^api/v1': {
-        target: 'https://127.0.0.1:1234/',
+      '/api/v1/*': {
+        target: 'http://127.0.0.1:1234',
         secure: false,
-        changeOrigin: true,
-        pathRewrite: {
-          // '^/api': '/api/v1'
-        }
+        changeOrigin: true
       }
     }
   },

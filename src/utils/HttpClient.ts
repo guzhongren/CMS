@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
-import * as Login from '@utils/Login'
+// import * as Login from '@utils/Login'
 // 自定义判断元素类型JS
 function toType(obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
@@ -36,9 +36,9 @@ function apiAxios(method, url, params) {
     params = filterNull(params)
   }
   return new Promise((resolve, reject) => {
-    if (!Login.default.GetLoginState()) {
-      // window.location.href = './index.html'
-    }
+    // if (!Login.default.GetLoginState()) {
+    //   // window.location.href = './index.html'
+    // }
     loadProgressBar()
     // axios.defaults.headers.common.Authorization = 'AUTH_TOKEN'
     axios({
@@ -46,9 +46,6 @@ function apiAxios(method, url, params) {
       url,
       data: method === 'POST' || method === 'PUT' ? params : null,
       params: method === 'GET' || method === 'DELETE' ? params : null,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
       withCredentials: false
     })
       .then((res) => {

@@ -5,7 +5,7 @@ interface ILoginParams {
   username: string,
   password: string
 }
-const Login = (params: ILoginParams, url = `api/login`) => {
+const Login = (params: ILoginParams, url = `/api/v1/login`) => {
   return HttpClient.post(url, params).then(data => {
     return data
   }, err => {

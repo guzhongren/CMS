@@ -7,7 +7,12 @@ export default {
     window.sessionStorage.setItem(KEY, JSON.stringify(userInfo))
   },
   GetLoginState: () => {
-    return window.sessionStorage.getItem(KEY)
+    const sessionValue = window.sessionStorage.getItem(KEY)!
+    if (sessionValue) {
+      return sessionValue.slice(1, -1)
+    } else {
+      return null
+    }
   },
   DeleteLoginState: () => {
     return new Promise((resolve) => {

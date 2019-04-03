@@ -1,0 +1,22 @@
+@import '../../../theme/theme.less';
+.userList{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .addUser{
+    align-self: flex-end;
+    margin: 25px;
+  }
+  .userTable{
+      display: flex;
+      justify-content: center;
+      align-self: center;
+      background-color: @theme-app-background-color;
+      width: 98%;
+      height: 750px;
+      .userListTable{
+        width: 100%;
+      }
+  }
+}

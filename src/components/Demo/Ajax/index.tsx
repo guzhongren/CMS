@@ -98,7 +98,7 @@ export default class AjaxTest extends React.Component<IProps, IState> {
                       title={<a href='https://ant.design'>{item.name}</a>}
                       description={item.content}
                     />
-                    <Button onClick={this.deleteBook.bind(this, item._id.$oid)}>删除</Button>
+                    <Button onClick={this.deleteBook.bind(this, item.id.$oid)}>删除</Button>
                   </List.Item>
                 )}
               />

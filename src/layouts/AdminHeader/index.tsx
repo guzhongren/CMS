@@ -50,7 +50,7 @@ export default class AdminHeader extends React.Component<IProps, IState> {
         </div >
       )
     } else {
-      return <Redirect to='/login'/>
+      return <Redirect to='/login' />
     }
     
   }

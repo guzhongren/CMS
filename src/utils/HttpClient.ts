@@ -49,11 +49,10 @@ function apiAxios(method, url, params) {
       withCredentials: false
     })
       .then((res) => {
-        console.log(res)
         if (res.status === 200) {
           const data = res.data
           if (data.success ===  true) {
-            data.data ? resolve(data.data) : resolve(true)
+            data.result ? resolve(data.result) : resolve(true)
           } else {
             // console.error('服务器状态不对', data)
             reject({error: data})

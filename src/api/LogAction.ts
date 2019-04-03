@@ -2,7 +2,7 @@
 import HttpClient from '@utils/HttpClient'
 
 interface ILoginParams {
-  username: string,
+  name: string,
   password: string
 }
 const Login = (params: ILoginParams, url = `/api/v1/login`) => {

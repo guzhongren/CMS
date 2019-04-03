@@ -1,13 +1,16 @@
 import React from 'react'
 import './index.less'
 import LoginAction from '@api/LogAction'
+import LoginUtils from '@utils/Login'
 import {
   Form, Icon, Input, Button, message
 } from 'antd'
+import { Redirect } from 'react-router-dom'
 
 interface IState {
   username?: string,
-  password?: string
+  password?: string,
+  isLogin?: boolean
 }
 
 export default class LoginComponent extends React.Component<any, IState> {
@@ -15,17 +18,38 @@ export default class LoginComponent extends React.Component<any, IState> {
     super(props)
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      isLogin: false
+    }
+  }
+  componentDidMount() {
+    const loginStatus = LoginUtils.GetLoginState()
+    if (loginStatus) {
+      this.setState({
+        isLogin: true
+      })
+    } else {
+      this.setState({
+        isLogin: false
+      })
     }
   }
   handleSubmit = (e) => {
     e.preventDefault()
     if (this.state.username && this.state.password) {
       const params = {
-        username: this.state.username,
+        name: this.state.username,
         password: this.state.password
       }
-      LoginAction.Login(params)
+      LoginAction.Login(params).then((data: any) => {
+        LoginUtils.SetLoginState(data.token)
+        this.setState({
+          isLogin: true
+        })
+      }, err => {
+        console.error(err)
+        message.error('用户名或密码错误')
+      })
     } else {
       message.error('用户名或密码不能为空！')
     }
@@ -40,8 +64,8 @@ export default class LoginComponent extends React.Component<any, IState> {
       password: e.target.value
     })
   }
-
-  render() {
+  // 登录面板
+  LoginForm = () => {
     return (
       <div className='loginContainer'>
         <Form className='loginForm'>
@@ -56,7 +80,17 @@ export default class LoginComponent extends React.Component<any, IState> {
           </Form.Item>
         </Form>
       </div>
-
     )
+  }
+
+  render() {
+    const loginForm  = this.LoginForm()
+    if (this.state.isLogin) {
+      return(
+        <Redirect to='/admin' />
+      )
+    } else {
+      return loginForm
+    }
   }
 }

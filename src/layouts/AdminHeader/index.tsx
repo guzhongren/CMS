@@ -42,15 +42,15 @@ export default class AdminHeader extends React.Component<IProps, IState> {
       return (
         <div className={'adminHeader'}>
           <NavLink to={'/'} className={'tool'}>
-            主页<FaHome className={'funcs'} />
+            主页<FaHome className={'iconSize'} />
           </NavLink>
           <span className='tool' onClick={this.logOut}>
-            退出<FaSignOutAlt className={'funcs'} />
+            退出<FaSignOutAlt className={'iconSize'} />
           </span>
         </div >
       )
     } else {
-      return <Redirect to='/login' />
+      return <Redirect to='/' />
     }
     
   }

@@ -19,13 +19,14 @@ export default class UserList extends React.Component<any, IState> {
 
   getUserList = () => {
     AdminAPI.User.getUserList().then((data: any) => {
-      console.log(data)
       data = data.map((item: any) => {
-        const utcTime = new Date(item.createTime)
+        const createTime = new Date(item.createTime * 1000)
+        const loginTime = new Date(item.loginTime * 1000)
         return {
-          'createTime': `${utcTime.getFullYear()}-${utcTime.getMonth() + 1}-${utcTime.getDay()}`,
+          'key': item.id,
+          'createTime': `${createTime.getFullYear()}/${createTime.getMonth() + 1}/${createTime.getDay() + 1}`,
           'id': item.id,
-          'loginTime': item.loginTime,
+          'loginTime': `${loginTime.getFullYear()}/${loginTime.getMonth() + 1}/${loginTime.getDay() + 1}`,
           'name': item.name,
           'role': item.role
         }

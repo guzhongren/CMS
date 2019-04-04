@@ -1,4 +1,5 @@
 import React from 'react'
+import './index.less'
 import { Modal, Form, Icon, Input, Button, message } from 'antd'
 import LoginAction from '@api/LogAction'
 import LoginUtils from '@utils/Login'
@@ -21,11 +22,27 @@ export default class LoginModal extends React.Component<IProps, IStates> {
       isModalVisible: this.props.isVisible
     }
   }
+  componentWillReceiveProps(nextProps: IProps) {
+    if (nextProps.isVisible !== this.props.isVisible) {
+      this.setState({
+        isModalVisible: nextProps.isVisible
+      })
+    }
+  }
   handleLoginCancel = () => {
     this.setState({
       isModalVisible: false
+    }, () => {
+      this.props.onLogin(false)
     })
 
+  }
+  handleCancel = () => {
+    this.setState({
+      isModalVisible: false,
+    }, () => {
+      this.props.onLogin(false)
+    })
   }
   handleSubmit = (e) => {
     e.preventDefault()
@@ -39,6 +56,8 @@ export default class LoginModal extends React.Component<IProps, IStates> {
           LoginUtils.SetLoginState(data.token)
           this.setState({
             isLogin: true
+          }, () => {
+            this.props.onLogin(true)
           })
         } else {
           message.error('网络错误，请检查网络！')
@@ -63,20 +82,20 @@ export default class LoginModal extends React.Component<IProps, IStates> {
   }
   render() {
     return (
-      <Modal title={'用户登录'} visible={this.state.isModalVisible}
-        onOk={this.handleSubmit}
+      <Modal title={'用户登录'} visible={this.state.isModalVisible} footer = {null}
         onCancel={this.handleLoginCancel}>
-        <Form className='loginForm'>
-          <Form.Item>
-            <Input prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='用户名' onChange={this.handleUsername} />
-          </Form.Item>
-          <Form.Item>
-            <Input prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} type='password' placeholder='密码' onChange={this.handlePassword} />
-          </Form.Item>
-          <Form.Item>
+          <Form className='loginForm'>
+            <Form.Item>
+              <Input prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='用户名' onChange={this.handleUsername} />
+            </Form.Item>
+            <Form.Item>
+              <Input prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} type='password' placeholder='密码' onChange={this.handlePassword} />
+            </Form.Item>
+            <Form.Item>
+            <Button className='loginBtn' onClick={this.handleCancel} >取消</Button>
             <Button type='primary' className='loginBtn' onClick={this.handleSubmit} >登录</Button>
-          </Form.Item>
-        </Form>
+            </Form.Item>
+          </Form>
       </Modal>
     )
   }

@@ -1,14 +1,21 @@
 import * as React from 'react'
 import './index.less'
-import { Menu, Icon, Modal } from 'antd'
-import { NavLink, Redirect } from 'react-router-dom'
+import { Menu, Icon } from 'antd'
+import { NavLink } from 'react-router-dom'
 import logo from './img/logo.png'
 import Config from '@config/index'
-import LoginUtils from '@utils/Login'
 const SubMenu = Menu.SubMenu
-
+import LoginModal from '@components/LoginModal'
+import LoginUtils from '@utils/Login'
+import { FaSignInAlt, FaUserCircle } from 'react-icons/fa'
 interface IState {
+  /**
+   *  当前tab页
+   */
   current?: string,
+  /**
+   * 用户是否已登录
+   */
   isLogin?: boolean,
   /**
    * 登录modal是否可见
@@ -19,7 +26,6 @@ export interface IProps {
   empty?: any
   height?: string
   theme?: any
-  // style?: any
 }
 
 
@@ -28,54 +34,89 @@ export default class NavBar extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       current: 'home',
-      isLogin: false,
-      isLoginModalVisible: false
+      isLoginModalVisible: false,
+      isLogin: false
     }
   }
-
   componentDidMount() {
-    const loginState = LoginUtils.GetLoginState()
+    const loginStatus = LoginUtils.GetLoginState()
     this.setState({
-      isLogin: loginState ? true : false
+      isLogin: loginStatus ? true : false
     })
   }
-  handleLoginCancel = () => {
-    console.log('cancel')
-    this.setState({
-      isLoginModalVisible: false
-    })
 
-  }
-  handleLoginOK = () => {
-    console.log('ok')
-    this.setState({
-      isLogin: true,
-      isLoginModalVisible: false
+  handleLogout = () => {
+    LoginUtils.DeleteLoginState().then(() => {
+      this.setState({
+        isLogin: false
+      })
     })
+  }
+  /**
+   * 渲染登录有的用户按钮
+   *
+   * @memberof NavBar
+   */
+  renderLoginMenu = () => {
+    return (
+      <SubMenu className='loginNav' key='13' title={<span><Icon type='mail' /><span>用户中心</span></span>}>
+        <Menu.Item key='14'>
+          <NavLink to='/admin'>
+            <Icon type='home' />
+            后台管理
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key='14'>
+          <NavLink to='/' onClick={this.handleLogout}>
+            <Icon type='home' />
+            退出
+          </NavLink>
+        </Menu.Item>
+      </SubMenu>
+    )
   }
   handleLogin = () => {
     this.setState({
       isLoginModalVisible: true
     })
   }
-  renderLoginMenu = () => {
-    return (
-      <SubMenu className='loginNav' key='13' title={<span><Icon type='mail' /><span>用户中心</span></span>}>
-        <Menu.Item key='14'><Redirect to='/admin' /></Menu.Item>
-      </SubMenu>
-    )
+  handleLoginStatus = (isLogin: boolean) => {
+    this.setState({
+      isLogin,
+      isLoginModalVisible: !isLogin
+    })
   }
   handleClick = (e) => {
     this.setState({
       current: e.key,
     })
   }
+
+  renderUserMenu = () => {
+    return(
+      <SubMenu className='loginNav' key='13' title={<span><FaUserCircle className='iconSize'/><span>个人中心</span></span>}>
+        <Menu.Item key='14'>
+          <NavLink to='/admin'>
+            <Icon type='setting-o' />
+              后台管理
+              </NavLink>
+        </Menu.Item>
+        <Menu.Item key='15'>
+          <NavLink to='/' onClick={this.handleLogout}>
+            <Icon type='home' />
+            退出
+          </NavLink>
+        </Menu.Item>
+      </SubMenu>
+    )
+  }
+
   render() {
     const menuStyle = {
       height: this.props.height!,       // 自定义导航栏高度
       lineHeight: this.props.height!    // 确保在自定义高度下导航内容保持在导航条内部上下居中
     }
-    const loginMenu = this.renderLoginMenu()
+    const userMenu = this.renderUserMenu()
     return (
       <Menu theme={this.props.theme} style={menuStyle} onClick={this.handleClick} selectedKeys={[this.state.current!]} mode='horizontal'>
         <Menu.Item key='home1'>
@@ -113,18 +154,11 @@ export default class NavBar extends React.Component<IProps, IState> {
             404
             </NavLink>
         </Menu.Item>
-        {this.state.isLogin ? loginMenu : <Menu.Item key='12' className='loginNav' onClick={this.handleLogin}>
-          <Icon type='smile-o' />
+        {this.state.isLogin ? userMenu : <Menu.Item key='12' className='loginNav' onClick={this.handleLogin}>
+          <FaSignInAlt className='iconSize'/>
           登录
         </Menu.Item>}
-        <Modal title='用户登录'
-          visible={this.state.isLoginModalVisible}
-          onOk={this.handleLoginOK}
-          onCancel={this.handleLoginCancel}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Modal>
+        <LoginModal isVisible={this.state.isLoginModalVisible} onLogin={this.handleLoginStatus} />
       </Menu>
     )
   }

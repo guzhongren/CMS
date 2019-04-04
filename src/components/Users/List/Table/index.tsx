@@ -1,5 +1,6 @@
 import React from 'react'
-import {Table} from 'antd'
+import { Table, Divider} from 'antd'
+import { NavLink } from 'react-router-dom'
 import './index.less'
 interface IProps {
   list?: any[]
@@ -37,9 +38,19 @@ export default class UserTable extends React.Component<IProps, IState> {
       title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
-    }]
+      }, {
+        title: '操作',
+        key: 'id',
+        render: (userInfo) => (
+          <span>
+            <NavLink to={`/admin/users/${userInfo.id}`}>查看</NavLink>
+            <Divider type='vertical' />
+            <a href='javascript:;'>删除</a>
+          </span>
+        ),
+      }]
     return(
-      <Table className={'userListTable'} dataSource={this.state.dataSource} columns={columns} />
+      <Table bordered pagination={{ pageSize: 10 }} className={'userListTable'} dataSource={this.state.dataSource} columns={columns} />
     )
   }
 }

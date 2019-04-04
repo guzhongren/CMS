@@ -41,7 +41,7 @@ export default class UserList extends React.Component<any, IState> {
   render() {
     return (
       <div className={'userList'}>
-        <div className='addUser'><Button type='primary' href='/admin/users'>新增用户</Button></div>
+        <div className='addUser'><Button type='primary'>新增用户</Button></div>
         <div className='userTable'><Table list={this.state.userList}/></div>
       </div>
     )

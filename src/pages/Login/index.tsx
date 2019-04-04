@@ -42,10 +42,14 @@ export default class LoginComponent extends React.Component<any, IState> {
         password: this.state.password
       }
       LoginAction.Login(params).then((data: any) => {
-        LoginUtils.SetLoginState(data.token)
-        this.setState({
-          isLogin: true
-        })
+        if (data) {
+          LoginUtils.SetLoginState(data.token)
+          this.setState({
+            isLogin: true
+          })
+        } else {
+          message.error('网络错误，请检查网络！')
+        }
       }, err => {
         console.error(err)
         message.error('用户名或密码错误')
@@ -76,7 +80,7 @@ export default class LoginComponent extends React.Component<any, IState> {
             <Input prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} type='password' placeholder='密码' onChange={this.handlePassword} />
           </Form.Item>
           <Form.Item>
-            <Button href='login' type='primary' className='loginBtn' onClick={this.handleSubmit} >登录</Button>
+            <Button type='primary' className='loginBtn' onClick={this.handleSubmit} >登录</Button>
           </Form.Item>
         </Form>
       </div>

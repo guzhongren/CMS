@@ -22,7 +22,6 @@ export default class LoginModal extends React.Component<IProps, IStates> {
     }
   }
   handleLoginCancel = () => {
-    console.log('cancel')
     this.setState({
       isModalVisible: false
     })

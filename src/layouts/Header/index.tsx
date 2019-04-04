@@ -7,7 +7,7 @@ import Config from '@config/index'
 const SubMenu = Menu.SubMenu
 import LoginModal from '@components/LoginModal'
 import LoginUtils from '@utils/Login'
-import { FaSignInAlt, FaUserCircle } from 'react-icons/fa'
+import { FaSignInAlt, FaSignOutAlt, FaUserCircle, FaCog } from 'react-icons/fa'
 interface IState {
   /**
    *  当前tab页
@@ -94,16 +94,16 @@ export default class NavBar extends React.Component<IProps, IState> {
 
   renderUserMenu = () => {
     return(
-      <SubMenu className='loginNav' key='13' title={<span><FaUserCircle className='iconSize'/><span>个人中心</span></span>}>
+      <SubMenu className='loginNav' key='13' title={<span><FaUserCircle className='icon'/><span>个人中心</span></span>}>
         <Menu.Item key='14'>
           <NavLink to='/admin'>
-            <Icon type='setting-o' />
+            <FaCog className='icon' />
               后台管理
               </NavLink>
         </Menu.Item>
         <Menu.Item key='15'>
           <NavLink to='/' onClick={this.handleLogout}>
-            <Icon type='home' />
+            <FaSignOutAlt className='icon' />
             退出
           </NavLink>
         </Menu.Item>
@@ -155,7 +155,7 @@ export default class NavBar extends React.Component<IProps, IState> {
             </NavLink>
         </Menu.Item>
         {this.state.isLogin ? userMenu : <Menu.Item key='12' className='loginNav' onClick={this.handleLogin}>
-          <FaSignInAlt className='iconSize'/>
+          <FaSignInAlt className='icon'/>
           登录
         </Menu.Item>}
         <LoginModal isVisible={this.state.isLoginModalVisible} onLogin={this.handleLoginStatus} />

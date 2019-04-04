@@ -42,10 +42,10 @@ export default class AdminHeader extends React.Component<IProps, IState> {
       return (
         <div className={'adminHeader'}>
           <NavLink to={'/'} className={'tool'}>
-            主页<FaHome className={'iconSize'} />
+            主页<FaHome className={'icon'} />
           </NavLink>
           <span className='tool' onClick={this.logOut}>
-            退出<FaSignOutAlt className={'iconSize'} />
+            退出<FaSignOutAlt className={'icon'} />
           </span>
         </div >
       )

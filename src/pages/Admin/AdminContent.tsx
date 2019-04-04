@@ -32,7 +32,7 @@ const AdminContent = ({ match }) => {
   }
   return (
     <Switch>
-      <Route exact path={`${match.url}/:detail`} component={adminContentDetail} />
+      <Route exact path={`${match.url}/add`} component={adminContentDetail} />
       <Route exact path={`${match.url}`} component={willLoadingComponent} />
       <Redirect to={`${match.url}`} />
     </Switch>

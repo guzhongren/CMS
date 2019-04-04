@@ -1,20 +1,28 @@
 import React from 'react'
 import './index.less'
 import Table from './Table'
-import {Button} from 'antd'
-
+import { Button, Breadcrumb } from 'antd'
+import { Redirect } from 'react-router-dom'
 import AdminAPI from '@api/Admin'
-
+import { FaHome, FaUsers, FaUserPlus } from 'react-icons/fa'
 interface IState {
-  userList: any[]
+  userList?: any[],
+  isAddUser?: boolean
 }
 export default class UserList extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      userList: []
+      userList: [],
+      isAddUser: false
     }
     this.getUserList()
+  }
+
+  handleAddUser = () => {
+    this.setState({
+      isAddUser: true
+    })
   }
 
   getUserList = () => {
@@ -41,10 +49,25 @@ export default class UserList extends React.Component<any, IState> {
 
   render() {
     return (
-      <div className={'userList'}>
-        <div className='addUser'><Button type='primary'>新增用户</Button></div>
-        <div className='userTable'><Table list={this.state.userList}/></div>
-      </div>
+      <React.Fragment>
+        {this.state.isAddUser && <Redirect to='/admin/users/add'/>}
+        {!this.state.isAddUser && <div className={'userList'}>
+          <div className='usersNavbar'>
+            <Breadcrumb>
+              <Breadcrumb.Item href='/'>
+                <FaHome className='icon' />
+              </Breadcrumb.Item>
+              <Breadcrumb.Item href='/admin/users'>
+                <FaUsers className='icon' />
+                <span>用户</span>
+              </Breadcrumb.Item>
+            </Breadcrumb>
+            <Button type='primary' onClick={this.handleAddUser} ><FaUserPlus className='icon' />新增用户</Button>
+          </div>
+          <div className='userTable'><Table list={this.state.userList} /></div>
+        </div>}
+        }
+      </React.Fragment>
     )
   }
 }

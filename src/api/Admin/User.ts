@@ -13,10 +13,14 @@ const getUserRoles = (url = 'api/v1/roles') => {
 const updateUser = (params: any, url = 'api/v1/users/') => {
   return HttpClient.put(`${url}${params.id}`, params)
 }
+const deleteUser = (id: string, url= 'api/v1/users/') => {
+  return HttpClient.delete(`${url}${id}`, {})
+}
 
 export default {
   getUserList,
   getUserDetail,
   getUserRoles,
-  updateUser
+  updateUser,
+  deleteUser
 }

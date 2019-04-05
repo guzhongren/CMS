@@ -113,6 +113,20 @@ export default class UserTable extends React.Component<IProps, IState> {
       isDrawerVisible: !this.state.isDrawerVisible
     })
   }
+  deleteUser = (id: string) => {
+    AdminAPI.User.deleteUser(id).then(data => {
+      if (data) {
+        message.success('删除成功！')
+        this.getUserList().then(userList => {
+          this.setState({
+            dataSource: userList
+          })
+        })
+      }
+    }, () => {
+      message.error('删除失败！')
+    })
+  }
   /**
    * 查看用户信息
    *
@@ -152,7 +166,7 @@ export default class UserTable extends React.Component<IProps, IState> {
     })
     
     return (
-      <Select defaultValue={defaultRole} value={this.state.selectedRoleId|| defaultRole.id} className={'userRoleSelect'} onSelect={this.handleRoleChange} >
+      <Select defaultValue={defaultRole} value={this.state.selectedRoleId || defaultRole.id} className={'userRoleSelect'} onSelect={this.handleRoleChange} >
           {options}
         </Select >
     )
@@ -190,7 +204,7 @@ export default class UserTable extends React.Component<IProps, IState> {
         <span>
           <a href='javascript:;' id='' onClick={this.lookUserDetail.bind(this, user.id)}>更新</a>
           <Divider type='vertical' />
-          <a href='javascript:;'>删除</a>
+          <a href='javascript:;' onClick={this.deleteUser.bind(this, user.id)}>删除</a>
         </span>
       ),
     }]

@@ -26,7 +26,15 @@ interface IState {
    */
   userInfo?: any,
   userRoleList?: any[],
-  selectDefaultValue?: string
+  selectDefaultValue?: string,
+  willUpdateUser?: any,
+  /**
+   * 默认被选中的角色
+   *
+   * @type {string}
+   * @memberof IState
+   */
+  selectedRoleId?: string
 }
 
 export default class UserTable extends React.Component<IProps, IState> {
@@ -45,10 +53,59 @@ export default class UserTable extends React.Component<IProps, IState> {
       })
     }
   }
+
+  handleRoleChange = (selectedValue: string) => {
+    const currentUser = this.state.userInfo
+    this.setState({
+      willUpdateUser: {
+        id: currentUser.id,
+        name: currentUser.name,
+        roleId: selectedValue
+      },
+      selectedRoleId: selectedValue
+    })
+  }
   handleUserUpdate = () => {
-    // TODO: 保存用户最新信息
+    AdminAPI.User.updateUser(this.state.willUpdateUser).then(data => {
+      if (data) {
+        this.getUserList().then(userList => {
+          this.setState({
+            isDrawerVisible: false,
+            dataSource: userList
+          })
+        })
+        message.info('更新成功！')
+      }
+    }, () => {
+      message.error('更新失败，请重新尝试！')
+    })
     this.setState({
       isDrawerVisible: false
+    })
+  }
+  /**
+   * 获取用户列表
+   *
+   * @memberof UserTable
+   * @returns Promise
+   */
+  getUserList = () => {
+    return AdminAPI.User.getUserList().then((data: any) => {
+      data = data.map((item: any) => {
+        const createTime = new Date(item.createTime * 1000)
+        const loginTime = new Date(item.loginTime * 1000)
+        return {
+          'key': item.id,
+          'createTime': `${createTime.getFullYear()}/${createTime.getMonth() + 1}/${createTime.getDay() + 1}`,
+          'id': item.id,
+          'loginTime': `${loginTime.getFullYear()}/${loginTime.getMonth() + 1}/${loginTime.getDay() + 1}`,
+          'name': item.name,
+          'role': item.role
+        }
+      })
+      return data
+    }, () => {
+      message.error('获取用户数据错误')
     })
   }
   onDrawerClose = () => {
@@ -61,12 +118,13 @@ export default class UserTable extends React.Component<IProps, IState> {
    *
    * @memberof UserTable
    */
-  lookUserDetail (id: string) {
+  lookUserDetail(id: string) {
     AdminAPI.User.getUserDetail(id).then((data: any) => {
       if (data) {
         this.setState({
           isDrawerVisible: true,
-          userInfo: data
+          userInfo: data,
+          selectedRoleId: data.roleId
         }, () => {
           AdminAPI.User.getUserRoles().then((roleRata: any) => {
             this.setState({
@@ -85,49 +143,48 @@ export default class UserTable extends React.Component<IProps, IState> {
    * @memberof UserTable
    */
   renderUserRoleSelect = () => {
-    // const currentUser = this.state.userInfo
-    // const defaultValue = this.state.userRoleList && this.state.userRoleList.find((role) => {
-    //     return role.name === currentUser.role
-    //   }).id
-     
+    const currentUser = this.state.userInfo
+    const defaultRole: any = this.state.userRoleList && this.state.userRoleList.find((role) => {
+      return role.name === currentUser.role
+    })
     const options = this.state.userRoleList && this.state.userRoleList.map(role => {
       return <Option key={role.id} value={role.id}>{role.name}</Option>
     })
-    return(
-      <Select defaultValue={1} className={'userRoleSelect'} >
-        <Option  value={1}>test</Option>
-        {options}
-      </Select >
+    
+    return (
+      <Select defaultValue={defaultRole} value={this.state.selectedRoleId|| defaultRole.id} className={'userRoleSelect'} onSelect={this.handleRoleChange} >
+          {options}
+        </Select >
     )
   }
 
   render() {
     const userInfo = this.state.userInfo!
-    const userRoleSelect = this.renderUserRoleSelect()
+    const userRoleSelect = userInfo && this.state.userRoleList && this.renderUserRoleSelect()
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
         sm: { span: 8 },
       },
       wrapperCol: {
-        xs: { span:                       24 },
-        sm: { span:                       16 },
+        xs: { span: 24 },
+        sm: { span: 16 },
       },
     }
     const columns = [{
-      title:                       '用户名',
+      title: '用户名',
       dataIndex: 'name',
       key: 'name',
     }, {
-      title:                       '角色',
+      title: '角色',
       dataIndex: 'role',
       key: 'role',
     }, {
-      title:                       '创建时间',
+      title: '创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
     }, {
-      title:                       '操作',
+      title: '操作',
       key: 'id',
       render: (user) => (
         <span>
@@ -140,25 +197,25 @@ export default class UserTable extends React.Component<IProps, IState> {
     return (
       < React.Fragment >
         <Table bordered pagination={{ pageSize: 10 }} className={'userListTable'} dataSource={this.state.dataSource} columns={columns} />
-        <Drawer title='用户详情' className='updateUserInfo'
+        <Drawer title='详情及更新' className='updateUserInfo'
           width={520}
           onClose={this.onDrawerClose}
           visible={this.state.isDrawerVisible}>
           {userInfo && <Form {...formItemLayout}>
             <Form.Item
               label='用户名'>
-              { userInfo.name}
+              {userInfo.name}
             </Form.Item>
             <Form.Item
               label='角色'>
-            {userInfo && this.state.userRoleList && userRoleSelect}
+              {userRoleSelect}
             </Form.Item>
             <Form.Item
               label='创建时间'>
               {(new Date(userInfo.createTime * 1000)).toLocaleDateString()}
             </Form.Item>
-            </Form>}
-            <div className='userUpdateFooter'>
+          </Form>}
+          <div className='userUpdateFooter'>
             <Button
               style={{
                 marginRight: 8,
@@ -170,7 +227,7 @@ export default class UserTable extends React.Component<IProps, IState> {
             <Button onClick={this.handleUserUpdate} type='primary'>
               Submit
             </Button>
-            </div>
+          </div>
         </Drawer>
       </React.Fragment >
     )

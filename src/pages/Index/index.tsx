@@ -11,7 +11,6 @@ export default class Index extends React.Component<any, IState> {
   map: any
   constructor(props: any) {
     super(props)
-    console.log(this.props.match)
   }
 
   render() {

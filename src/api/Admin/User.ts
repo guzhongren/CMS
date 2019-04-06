@@ -20,7 +20,7 @@ const addUser = (params, url = `${apiPrefix}users`) => {
   return HttpClient.post(url, params)
 }
 const resetPassword = (params: any) => {
-  return HttpClient.put(`${apiPrefix}${params.id}/resetPassword`, params)
+  return HttpClient.put(`${apiPrefix}users/${params.id}/resetPassword`, params)
 }
 export default {
   getUserList,

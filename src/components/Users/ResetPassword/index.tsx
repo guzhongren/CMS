@@ -28,7 +28,6 @@ export default class Add extends React.Component<any, IState> {
     })
   }
   handleResetPassword = () => {
-    console.log('test')
     if (this.state.password === '' ) {
       message.error('密码无效！')
       return
@@ -37,8 +36,9 @@ export default class Add extends React.Component<any, IState> {
       message.error('密码无效！')
       return
     }
+    const userInfo = JSON.parse(LoginUtils.GetUserInfo()!)
     const params = {
-      id: 'todo in session',
+      id: userInfo.id,
       password: this.state.password
     }
     AdminAPI.User.resetPassword(params).then(data => {
@@ -70,7 +70,7 @@ export default class Add extends React.Component<any, IState> {
     return (
       <React.Fragment>
         {this.state.isDeleted && <Redirect to='/#/login'/>}
-        <div className={'userList'}>
+        <div className={'resetPassword'}>
           <div className='usersNavbar'>
             <Breadcrumb>
               <Breadcrumb.Item href='/#/'>
@@ -111,7 +111,7 @@ export default class Add extends React.Component<any, IState> {
                 />
               </Form.Item>
               <Form.Item className='btn'>
-                <Button type='primary' className='createUser' onClick={this.handleResetPassword}>确认</Button>
+                <Button type='primary' className='updatePassword' onClick={this.handleResetPassword}>确认</Button>
               </Form.Item>
             </Form>
           </div>

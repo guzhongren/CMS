@@ -1,27 +1,62 @@
 import React from 'react'
-
-import {
-  Route,
-  Link,
-  Switch
-} from 'react-router-dom'
-
-/**
- * 子路由中套子路由
- * @param param0
- */
-export default ({ match }) => {
-  return (
-    <React.Fragment>
-      <div>{`team iD: ${match.params.detail}`}</div>
-      <h3><Link to={`${match.url}/guzhongren`}>Show Leader</Link></h3>
-      <Switch>
-        <Route path={`${match.url}/:name`} component={ShowLeader} />
-        {/* <Redirect to={`${match.url}`} /> */}
-      </Switch>
-    </React.Fragment>
-  )
+import './index.less'
+import Table from './Table'
+import { Button, Breadcrumb } from 'antd'
+import { Redirect } from 'react-router-dom'
+import AdminAPI from '@api/Admin'
+import { FaHome, FaBoxes } from 'react-icons/fa'
+interface IState {
+  materialsList?: any[],
+  isAddMaterial?: boolean
 }
-const ShowLeader = ({ match }) => (
-  <div>Leader Name: {match.params.name}</div>
-)
+export default class UserList extends React.Component<any, IState> {
+  constructor(props: any) {
+    super(props)
+    this.state = {
+      materialsList: [],
+      isAddMaterial: false
+    }
+    this.getUserList()
+  }
+
+  handleAddUser = () => {
+    this.setState({
+      isAddMaterial: true
+    })
+  }
+
+  getUserList = () => {
+    AdminAPI.Material.getMaterialList().then((data: any) => {
+      console.log(data)
+      this.setState({
+        materialsList: data
+      })
+    }, err => {
+      console.error(err)
+    })
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        {this.state.isAddMaterial && <Redirect to='/admin/materials/add'/>}
+        {!this.state.isAddMaterial && <div className={'materialsList'}>
+          <div className='usersNavbar'>
+            <Breadcrumb>
+              <Breadcrumb.Item href='/#/admin'>
+                <FaHome className='icon' />
+              </Breadcrumb.Item>
+              <Breadcrumb.Item href='/#/admin/materials'>
+                <FaBoxes className='icon' />
+                <span>物料</span>
+              </Breadcrumb.Item>
+            </Breadcrumb>
+            <Button type='primary' onClick={this.handleAddUser} ><FaBoxes className='icon' />新增物料</Button>
+          </div>
+          <div className='userTable'><Table list={this.state.materialsList} /></div>
+        </div>}
+        }
+      </React.Fragment>
+    )
+  }
+}

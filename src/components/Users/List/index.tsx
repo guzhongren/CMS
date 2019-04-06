@@ -50,14 +50,14 @@ export default class UserList extends React.Component<any, IState> {
   render() {
     return (
       <React.Fragment>
-        {this.state.isAddUser && <Redirect to='/admin/users/add'/>}
+        {this.state.isAddUser && <Redirect to='/#/admin/users/add'/>}
         {!this.state.isAddUser && <div className={'userList'}>
           <div className='usersNavbar'>
             <Breadcrumb>
-              <Breadcrumb.Item href='/'>
+              <Breadcrumb.Item href='/#/'>
                 <FaHome className='icon' />
               </Breadcrumb.Item>
-              <Breadcrumb.Item href='/admin/users'>
+              <Breadcrumb.Item href='/#/admin/users'>
                 <FaUsers className='icon' />
                 <span>用户</span>
               </Breadcrumb.Item>

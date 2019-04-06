@@ -37,10 +37,10 @@ const Admin = ({ match }) => {
             <Menu.Item key='team1'><Link to={`${match.url}/materials`}>所有物料</Link></Menu.Item>
             <Menu.Item key='team2'><Link to={`${match.url}/materials/add`}>新增物料</Link></Menu.Item>
           </SubMenu>
-          <Menu.Item key='9'>
+          {/* <Menu.Item key='9'>
             <Icon type='file' />
-            <span>File</span>
-          </Menu.Item>
+            <span>其他信息</span>
+          </Menu.Item> */}
         </Menu>
       </Sider>
       <Layout>

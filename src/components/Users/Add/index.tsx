@@ -142,7 +142,7 @@ export default class Add extends React.Component<any, IState> {
         {!this.state.isAddUser && <div className={'userList'}>
           <div className='usersNavbar'>
             <Breadcrumb>
-              <Breadcrumb.Item href='/#/'>
+              <Breadcrumb.Item href='/#/admin'>
                 <FaHome className='icon' />
               </Breadcrumb.Item>
               <Breadcrumb.Item href='/#/admin/users'>

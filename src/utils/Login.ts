@@ -1,7 +1,7 @@
 /**
  * 主要用来处理用户登录控制，存储, 获取和删除session
  */
-const KEY = 'USER'
+const KEY = 'token'
 export default {
   SetLoginState: (userInfo) => {
     window.sessionStorage.setItem(KEY, JSON.stringify(userInfo))

@@ -19,12 +19,15 @@ const deleteUser = (id: string, url = `${apiPrefix}users/`) => {
 const addUser = (params, url = `${apiPrefix}users`) => {
   return HttpClient.post(url, params)
 }
-
+const resetPassword = (params: any) => {
+  return HttpClient.put(`${apiPrefix}${params.id}/resetPassword`, params)
+}
 export default {
   getUserList,
   getUserDetail,
   getUserRoles,
   updateUser,
   deleteUser,
-  addUser
+  addUser,
+  resetPassword
 }

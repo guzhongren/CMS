@@ -106,12 +106,6 @@ export default class Add extends React.Component<any, IState> {
       console.error(err)
     })
   }
-  renderAddUser = () => {
-
-    return (
-      <div>test</div>
-    )
-  }
   handleRoleChange = (value) => {
     this.setState({
       selectedRoleId: value || this.state.userRoleList![0].id

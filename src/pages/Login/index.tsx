@@ -23,7 +23,7 @@ export default class LoginComponent extends React.Component<any, IState> {
     }
   }
   componentDidMount() {
-    const loginStatus = LoginUtils.GetLoginState()
+    const loginStatus = LoginUtils.GetToken()
     if (loginStatus) {
       this.setState({
         isLogin: true
@@ -43,7 +43,7 @@ export default class LoginComponent extends React.Component<any, IState> {
       }
       LoginAction.Login(params).then((data: any) => {
         if (data) {
-          LoginUtils.SetLoginState(data.token)
+          LoginUtils.SetToken(data.token)
           this.setState({
             isLogin: true
           })

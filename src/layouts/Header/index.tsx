@@ -39,14 +39,14 @@ export default class NavBar extends React.Component<IProps, IState> {
     }
   }
   componentDidMount() {
-    const loginStatus = LoginUtils.GetLoginState()
+    const loginStatus = LoginUtils.GetToken()
     this.setState({
       isLogin: loginStatus ? true : false
     })
   }
 
   handleLogout = () => {
-    LoginUtils.DeleteLoginState().then(() => {
+    LoginUtils.DeleteToken().then(() => {
       this.setState({
         isLogin: false
       })

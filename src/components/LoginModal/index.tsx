@@ -53,7 +53,7 @@ export default class LoginModal extends React.Component<IProps, IStates> {
       }
       LoginAction.Login(params).then((data: any) => {
         if (data) {
-          LoginUtils.SetLoginState(data.token)
+          LoginUtils.SetToken(data.token)
           this.setState({
             isLogin: true
           }, () => {

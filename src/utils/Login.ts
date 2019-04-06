@@ -3,10 +3,10 @@
  */
 const KEY = 'token'
 export default {
-  SetLoginState: (userInfo) => {
+  SetToken: (userInfo) => {
     window.sessionStorage.setItem(KEY, JSON.stringify(userInfo))
   },
-  GetLoginState: () => {
+  GetToken: () => {
     const sessionValue = window.sessionStorage.getItem(KEY)!
     if (sessionValue) {
       return sessionValue.slice(1, -1)
@@ -14,7 +14,7 @@ export default {
       return null
     }
   },
-  DeleteLoginState: () => {
+  DeleteToken: () => {
     return new Promise((resolve) => {
       window.sessionStorage.removeItem(KEY)
       resolve({ 'isDeleted': true })

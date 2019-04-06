@@ -43,7 +43,7 @@ export default class Add extends React.Component<any, IState> {
     }
     AdminAPI.User.resetPassword(params).then(data => {
       if (data) {
-        LoginUtils.DeleteLoginState().then(() => {
+        LoginUtils.DeleteToken().then(() => {
           this.setState({
             isDeleted: true
           }, () => {

@@ -18,7 +18,7 @@ export default class AdminHeader extends React.Component<IProps, IState> {
     }
   }
   componentDidMount() {
-    const loginStatus = LoginUtils.GetLoginState()
+    const loginStatus = LoginUtils.GetToken()
     if (loginStatus) {
       this.setState({
         isLogin: true
@@ -31,7 +31,7 @@ export default class AdminHeader extends React.Component<IProps, IState> {
   }
 
   logOut = () => {
-    LoginUtils.DeleteLoginState().then(() => {
+    LoginUtils.DeleteToken().then(() => {
       this.setState({
         isLogin: false
       })

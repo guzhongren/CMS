@@ -36,7 +36,7 @@ function apiAxios(method: string, url: string, params) {
     params = filterNull(params)
   }
   return new Promise((resolve, reject) => {
-    const token = LoginUtils.GetLoginState()
+    const token = LoginUtils.GetToken()
     if (url.indexOf('login') < 0) {
       if (token) {
         axios.defaults.headers.Authorization = `Bearer ${token}`

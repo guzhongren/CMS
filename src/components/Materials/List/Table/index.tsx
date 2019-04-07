@@ -1,10 +1,11 @@
 import React from 'react'
 import './index.less'
-import { Table, Divider, Drawer, message, Form, Select, Button } from 'antd'
+import { Table, Divider, Drawer, message, Form, Select, Button, Input, InputNumber } from 'antd'
 
 const Option = Select.Option
 
 import AdminAPI from '@api/Admin'
+import { NavLink } from 'react-router-dom'
 interface IProps {
   list?: any[]
 }
@@ -24,17 +25,35 @@ interface IState {
    * @type {*}
    * @memberof IState
    */
-  userInfo?: any,
-  userRoleList?: any[],
-  selectDefaultValue?: string,
-  willUpdateUser?: any,
+  materialInfo?: any,
+  materialTypeList?: any[],
+  willUpdateMaterial?: any,
+  
+  /**
+   * 物料名称
+   *
+   * @type {string}
+   * @memberof IState
+   */
+  name?: string
   /**
    * 默认被选中的角色
    *
    * @type {string}
    * @memberof IState
    */
-  selectedRoleId?: string
+  selectedType?: string
+  /**
+   * 存放地址
+   *
+   * @type {string}
+   * @memberof IState
+   */
+  location?: string
+  provider?: string,
+  providerLink?: string,
+  count?: number,
+  price?: number
 }
 
 export default class UserTable extends React.Component<IProps, IState> {
@@ -43,7 +62,7 @@ export default class UserTable extends React.Component<IProps, IState> {
     this.state = {
       dataSource: this.props.list,
       isDrawerVisible: false,
-      userInfo: null
+      materialInfo: null
     }
   }
   componentWillReceiveProps(nextProps: IProps) {
@@ -54,18 +73,20 @@ export default class UserTable extends React.Component<IProps, IState> {
     }
   }
 
-  handleRoleChange = (selectedValue: string) => {
-    const currentUser = this.state.userInfo
+  handleTypeChange = (selectedValue: string) => {
+    const currentUser = this.state.materialInfo
     this.setState({
-      willUpdateUser: {
+      willUpdateMaterial: {
         id: currentUser.id,
         name: currentUser.name,
         roleId: selectedValue
       },
-      selectedRoleId: selectedValue
+      selectedType: selectedValue
     })
   }
+  // TODO： 更新物料信息
   handleMaterialUpdate = () => {
+
     AdminAPI.Material.getMaterialList().then((data: any) => {
       this.setState({
         isDrawerVisible: false,
@@ -122,21 +143,26 @@ export default class UserTable extends React.Component<IProps, IState> {
     })
   }
   /**
-   * 查看用户信息
+   * 查看物料信息
    *
    * @memberof UserTable
    */
   lookMaterialDetail(id: string) {
-    AdminAPI.User.getUserDetail(id).then((data: any) => {
+    AdminAPI.Material.getMaterialDetail(id).then((data: any) => {
       if (data) {
         this.setState({
           isDrawerVisible: true,
-          userInfo: data,
-          selectedRoleId: data.roleId
+          materialInfo: data,
+          name: data.name,
+          location: data.location.Valid ? data.location.String : '',
+          provider: data.provider.Valid ? data.provider.String : '',
+          providerLink: data.providerLink.Valid ? data.providerLink.String : '',
+          count: data.count.Valid ? data.count.Int64 : 0,
+          price: data.price.Valid ? data.price.Float64 : 0,
         }, () => {
-          AdminAPI.User.getUserRoles().then((roleRata: any) => {
+          AdminAPI.Material.getMaterialTypes().then((types: any) => {
             this.setState({
-              userRoleList: roleRata
+              materialTypeList: types
             })
           })
         })
@@ -150,25 +176,25 @@ export default class UserTable extends React.Component<IProps, IState> {
    *
    * @memberof UserTable
    */
-  renderUserRoleSelect = () => {
-    const currentUser = this.state.userInfo
-    const defaultRole: any = this.state.userRoleList && this.state.userRoleList.find((role) => {
-      return role.name === currentUser.role
+  renderTypeSelect = () => {
+    const currentMaterial = this.state.materialInfo
+    const defaultType: any = this.state.materialTypeList && this.state.materialTypeList.find((type) => {
+      return type.name === currentMaterial.typeName
     })
-    const options = this.state.userRoleList && this.state.userRoleList.map(role => {
-      return <Option key={role.id} value={role.id}>{role.name}</Option>
+    const options = this.state.materialTypeList && this.state.materialTypeList.map(type => {
+      return <Option key={type.id} value={type.id}>{type.name}</Option>
     })
 
     return (
-      <Select defaultValue={defaultRole} value={this.state.selectedRoleId || defaultRole.id} className={'userRoleSelect'} onSelect={this.handleRoleChange} >
+      <Select defaultValue={defaultType.id} value={this.state.selectedType || defaultType.name} className={'userRoleSelect'} onSelect={this.handleTypeChange} >
         {options}
       </Select >
     )
   }
 
   render() {
-    const userInfo = this.state.userInfo!
-    const userRoleSelect = userInfo && this.state.userRoleList && this.renderUserRoleSelect()
+    const materialInfo = this.state.materialInfo!
+    const userTypeSelect = materialInfo && this.state.materialTypeList && this.renderTypeSelect()
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -240,22 +266,50 @@ export default class UserTable extends React.Component<IProps, IState> {
     return (
       < React.Fragment >
         {this.state.dataSource && <Table bordered pagination={{ pageSize: 10 }} className={'materialListTable'} dataSource={this.state.dataSource} columns={columns} />}
-        <Drawer title='详情及更新' className='updateUserInfo'
+        <Drawer title='物料详情及更新' className='updateMaterialInfo'
           width={520}
           onClose={this.onDrawerClose}
           visible={this.state.isDrawerVisible}>
-          {userInfo && <Form {...formItemLayout}>
+          {materialInfo && <Form {...formItemLayout}>
             <Form.Item
-              label='用户名'>
-              {userInfo.name}
+              label='名称'>
+              <Input value={this.state.name} />
             </Form.Item>
             <Form.Item
-              label='角色'>
-              {userRoleSelect}
+              label='类型'>
+              {userTypeSelect}
+            </Form.Item>
+            <Form.Item
+              label='存放地址'>
+              <Input value={this.state.location} />
+            </Form.Item>
+            <Form.Item
+              label='提供者'>
+              <Input value={this.state.provider} />
+            </Form.Item>
+            <Form.Item
+              label='提供者链接'>
+              <Input value={this.state.providerLink} />
+            </Form.Item>
+            <Form.Item
+              label='数量'>
+              <InputNumber value={this.state.count} className='number' placeholder='输入物料数量' min={0} max={1000000} step={1} />
+            </Form.Item>
+            <Form.Item
+              label='金额'>
+              <InputNumber value={this.state.price} className='number' placeholder='输入金额' min={0} max={1000000} step={.1} />
             </Form.Item>
             <Form.Item
               label='创建时间'>
-              {(new Date(userInfo.createTime * 1000)).toLocaleDateString()}
+              {(new Date(materialInfo.createTime * 1000)).toLocaleDateString()}
+            </Form.Item>
+            <Form.Item
+              label='最后更新时间'>
+              {materialInfo.updateTime.Valid && materialInfo.updateTime.Int64 !== 0 ? (new Date(materialInfo.updateTime.Int64).toLocaleDateString()) : '--'}
+            </Form.Item>
+            <Form.Item
+              label='最后更新者'>
+              {<NavLink to={'/admin/users/' + materialInfo.updateUser.id} >{materialInfo.updateUser.name}</NavLink>}
             </Form.Item>
           </Form>}
           <div className='userUpdateFooter'>

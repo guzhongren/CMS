@@ -6,8 +6,10 @@ const getMaterialList = (url = `${apiPrefix}/materials`) => {
     if (data) {
       data.forEach((item: any, id) => {
         const createTime = new Date(item.createTime * 1000)
-        const originUpdateTime = new Date(item.createTime * 1000)
-        const updateTime = item.updateTime.Valid ? `${originUpdateTime.getFullYear()}/${originUpdateTime.getMonth() + 1}/${originUpdateTime.getDay() + 1}` : false
+        let updateTime = ''
+        if (item.updateTime.Valid && item.updateTime.Int64 !== 0) {
+          updateTime = (new Date(item.updateTime.Int64 * 1000)).toLocaleDateString()
+        }
         const imageList = item.images.Valid ? item.images.String.split(',') : false
         const temp = {
           'seriesId': id,
@@ -23,6 +25,7 @@ const getMaterialList = (url = `${apiPrefix}/materials`) => {
           'images': imageList,
           'createTime': `${createTime.getFullYear()}/${createTime.getMonth() + 1}/${createTime.getDay() + 1}`,
           'updateTime': updateTime,
+          'updateUser': item.updateUser.Valid && item.updateUser.name !== '' ? item.updateUser.name : '--',
           'count': item.count.Valid ? item.count.Int64 : false,
           'price': item.price.Valid ? item.price.Float64 : 0
         }

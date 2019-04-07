@@ -74,7 +74,7 @@ module.exports = {
       name: 'runtime'
     }
   },
-  devtool: isProduction ? 'cheap-module-source-map' : 'cheap-module-eval-source-map',
+  devtool: isProduction ? '(none)' : 'cheap-module-eval-source-map',
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {

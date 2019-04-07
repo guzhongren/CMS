@@ -1,11 +1,23 @@
 import React from 'react'
 import './index.less'
 import { Button, Breadcrumb, Form, Input, message, Select, InputNumber, Upload, Icon } from 'antd'
+import { FormComponentProps } from 'antd/lib/form'
 const Option = Select.Option
-const Dragger = Upload.Dragger
 import { Redirect } from 'react-router-dom'
 import AdminAPI from '@api/Admin'
-import { FaHome, FaBoxes, FaCartPlus, FaAsterisk } from 'react-icons/fa'
+import { FaHome, FaBoxes, FaCartPlus } from 'react-icons/fa'
+
+interface IProps extends FormComponentProps {
+  name?: string,
+  location?: string,
+  count?: number,
+  provider?: string,
+  providerLink?: string,
+  images?: any[],
+  price?: number,
+  materialTypeList?: any[],
+  type?: number
+}
 interface IState {
   isAdded?: boolean,
   name?: string,
@@ -16,91 +28,46 @@ interface IState {
   images?: any[],
   price?: number,
   materialTypeList?: any[],
-  selectedMaterialTypeId?: string
+  selectedMaterialTypeId?: number
 }
-export default class Add extends React.Component<any, IState> {
+class AddComp extends React.Component<IProps, IState> {
+  upLoader: any
   constructor(props: any) {
     super(props)
     this.state = {
       isAdded: false,
+      location: '',
+      count: 0,
+      provider: '',
+      providerLink: '',
+      images: [],
       price: 0
     }
+    this.upLoader = React.createRef()
     this.getMaterialTypeList()
   }
-  handlerAddUser = () => {
-    if (this.state.name === '') {
-      message.error('物料名称为必填项！')
-      return
-    }
-    if (this.state.name === '') {
-      message.error('密码为必填项！')
-      return
-    }
-    const params = {
-      name: this.state.name,
-      roleId: this.state.selectedMaterialTypeId,
-      password: this.state.name
-    }
-    AdminAPI.User.addUser(params).then(data => {
-      if (data) {
-        this.setState({
-          name: '',
-          selectedMaterialTypeId: this.state.materialTypeList![0].id,
-          provider: '',
-          // repeatPassword: ''
-        }, () => {
-          message.success('添加用户成功！')
-        })
+  handlerAddMaterial = (evt) => {
+    evt.preventDefault()
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values)
+      
+      } else {
+        message.error('上传物料失败, 请重试！')
       }
-    }, () => {
-      message.error('添加用户失败，请重试！')
     })
   }
-  handleDraggerImages = (info) => {
+  handleUploadImage = (info) => {
     const status = info.file.status
     if (status !== 'uploading') {
       console.log(info.file, info.fileList)
     }
     if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`)
+      console.log(info)
+      message.success(`${info.file.name} 上传成功.`)
     } else if (status === 'error') {
-      message.error(`${info.file.name} file upload failed.`)
+      message.error(`${info.file.name} 上传失败.`)
     }
-  }
-  handlePrice = (value) => {
-    this.setState({
-      price: value || 0
-    })
-  }
-  handleCount = (evt) => {
-    this.setState({
-      count: evt.target.value || 0
-    })
-  }
-  handleProviderLink = (evt) => {
-    this.setState({
-      providerLink: evt.target.value || ''
-    })
-  }
-  handleProvider = (evt) => {
-    this.setState({
-      provider: evt.target.value || ''
-    })
-  }
-  handleLocation = (evt) => {
-    this.setState({
-      location: evt.target.value || ''
-    })
-  }
-  handleUserName = (evt) => {
-    this.setState({
-      name: evt.target.value
-    })
-  }
-  handleAddUser = () => {
-    this.setState({
-      isAdded: true
-    })
   }
   getMaterialTypeList = () => {
     AdminAPI.Material.getMaterialTypes().then((roleRata: any) => {
@@ -110,35 +77,23 @@ export default class Add extends React.Component<any, IState> {
       })
     })
   }
-  // getUserList = () => {
-  //   AdminAPI.Material.getMaterialList().then((data: any) => {
-  //     this.setState({
-  //       userList: data
-  //     })
-  //   }, err => {
-  //     console.error(err)
-  //   })
-  // }
-  handleRoleChange = (value) => {
-    this.setState({
-      selectedMaterialTypeId: value || this.state.materialTypeList![0].id
-    })
-  }
-  renderUserRoleSelect = () => {
+  renderMaterialTypesSelect = () => {
     const materialTypeList = this.state.materialTypeList!
     const options = materialTypeList && materialTypeList.map(role => {
       return <Option key={role.id} value={role.id}>{role.name}</Option>
     })
-
     return (
-      <Select defaultValue={materialTypeList[0].id} value={this.state.selectedMaterialTypeId} className={'userRoleSelect'} onSelect={this.handleRoleChange} >
-        {options}
+      <Select defaultValue={materialTypeList[0].id} value={materialTypeList[0].id} className={'userRoleSelect'} >
+        {options.map(option => {
+          return option
+        })}
       </Select >
     )
   }
 
+
   render() {
-    const userRoleSelect = this.state.materialTypeList && this.renderUserRoleSelect()
+    // const materialTypesSelect = this.state.materialTypeList && this.renderMaterialTypesSelect()
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -149,6 +104,7 @@ export default class Add extends React.Component<any, IState> {
         sm: { span: 16 },
       },
     }
+    const { getFieldDecorator } = this.props.form
     return (
       <React.Fragment>
         {this.state.isAdded && <Redirect to='/admin/materials/add' />}
@@ -169,7 +125,96 @@ export default class Add extends React.Component<any, IState> {
             </Breadcrumb>
           </div>
           <div className='addUserForm'>
-            <Form {...formItemLayout}>
+            <Form onSubmit={this.handlerAddMaterial} {...formItemLayout}>
+
+              <Form.Item
+                label='名称'>
+                {getFieldDecorator('name', {
+                  rules: [{ required: true, message: 'Please input your username!' }],
+                })(
+                  <Input name='name' placeholder='输入物料名称' />
+                )}
+              </Form.Item>
+              <Form.Item
+                label='类型'>
+                {getFieldDecorator('type', {
+                  rules: [{ required: true, message: '请选择物料类型' }],
+                })(
+                  <Select placeholder='Please select a country'>
+                    <Option value='1'>China</Option>
+                    <Option value='2'>U.S.A</Option>
+                  </Select>
+                  // { materialTypesSelect}
+                )}
+
+              </Form.Item>
+              <Form.Item
+                label='存放位置'
+              >
+                {getFieldDecorator('location', {
+                  rules: [{ required: false, message: '输入存放位置!' }],
+                })(
+                  <Input name='location' placeholder='输入存放位置' />
+                )}
+              </Form.Item>
+              <Form.Item
+                label='提供者'
+              >
+                {getFieldDecorator('provider', {
+                  rules: [{ required: false, message: '输入提供者信息!' }],
+                })(
+                  <Input name='provider' placeholder='输入提供者信息' />
+                )}
+              </Form.Item>
+              <Form.Item
+                label='提供者链接'
+              >
+                {getFieldDecorator('providerLink', {
+                  rules: [{ required: false, message: '输入提供者信息!' }],
+                })(
+                  <Input name='providerLink' placeholder='输入提供者信息' />
+                )}
+              </Form.Item>
+              <Form.Item
+
+                label='数量'
+              >
+                {getFieldDecorator('count', {
+                  rules: [{ required: false, message: '输入物料数量!' }],
+                })(
+                  <InputNumber name='count' className='number' placeholder='输入物料数量' min={0} max={1000000} step={1} />
+                )}
+              </Form.Item>
+              <Form.Item
+                label='金额'
+              >
+                {getFieldDecorator('price', {
+                  rules: [{ required: false, message: '输入金额!' }],
+                })(
+                  <InputNumber className='number 1' placeholder='输入金额' min={0} max={1000000} step={0.1} />
+                )}
+              </Form.Item>
+              <Form.Item
+                label='图片'
+              >
+                {getFieldDecorator('images', {
+                  rules: [{ required: false, message: '输入金额!' }],
+                })(
+                  // <input type='file' id='images' name='images' multiple accept='.jpg,.jpeg,.png,.webp' ref={this.upLoader} />
+                  <Upload.Dragger name='images' multiple action={AdminAPI.File.upload()} accept='.jpg,.jpeg,.png,.webp' onChange={this.handleUploadImage}>
+                    <p className='ant-upload-drag-icon'>
+                      <Icon type='inbox' />
+                    </p>
+                    <p className='ant-upload-text'>Click or drag file to this area to upload</p>
+                    <p className='ant-upload-hint'>Support for a single or bulk upload.</p>
+                  </Upload.Dragger>
+                )}
+              </Form.Item>
+              <Form.Item className='btn'>
+                <Button type='primary' htmlType='submit' className='createUser'>确认</Button>
+              </Form.Item>
+            </Form>
+            {/* <Form {...formItemLayout}>
               <Form.Item
                 label={<span><FaAsterisk style={{width: 8, color: 'red'}} />名称</span>}
               >
@@ -236,18 +281,12 @@ export default class Add extends React.Component<any, IState> {
               <Form.Item
                 label='图片'
               >
-                <Dragger multiple={true} onChange={this.handleDraggerImages} accept={'.jpg, .jpeg, .pdf, .png, .webp'}>
-                  <p className='ant-upload-drag-icon'>
-                    <Icon type='inbox' />
-                  </p>
-                  <p className='ant-upload-text'>点击或拖拽即可上传</p>
-                  <p className='ant-upload-hint'>支持单个或批量上传。严格禁止上传公司数据或其他文件</p>
-                </Dragger>
+                <input type='file' id='images' multiple accept='.jpg,.jpeg,.png,.webp' ref={this.upLoader} onChange={this.handleUploadImages}/>
               </Form.Item>
               <Form.Item className='btn'>
-                <Button type='primary' className='createUser' onClick={this.handlerAddUser}>确认</Button>
+                <Button type='primary' className='createUser' onClick={this.handlerAddMaterial}>确认</Button>
               </Form.Item>
-            </Form>
+            </Form> */}
           </div>
         </div>
         }
@@ -255,3 +294,7 @@ export default class Add extends React.Component<any, IState> {
     )
   }
 }
+
+
+
+export default Form.create<IProps>({})(AddComp)

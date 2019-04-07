@@ -16,7 +16,7 @@ export default class UserList extends React.Component<any, IState> {
       materialsList: [],
       isAddMaterial: false
     }
-    this.getUserList()
+    this.getMaterialList()
   }
 
   handleAddUser = () => {
@@ -25,9 +25,8 @@ export default class UserList extends React.Component<any, IState> {
     })
   }
 
-  getUserList = () => {
+  getMaterialList = () => {
     AdminAPI.Material.getMaterialList().then((data: any) => {
-      console.log(data)
       this.setState({
         materialsList: data
       })

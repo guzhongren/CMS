@@ -18,6 +18,10 @@ interface IProps extends FormComponentProps {
   materialTypeList?: any[],
   type?: number
 }
+
+interface IFile {
+  [key: string]: string
+}
 interface IState {
   isAdded?: boolean,
   name?: string,
@@ -25,7 +29,7 @@ interface IState {
   count?: number,
   provider?: string,
   providerLink?: string,
-  images?: any[],
+  uploadedImages?: IFile,
   price?: number,
   materialTypeList?: any[],
   selectedMaterialTypeId?: number
@@ -40,7 +44,7 @@ class AddComp extends React.Component<IProps, IState> {
       count: 0,
       provider: '',
       providerLink: '',
-      images: [],
+      uploadedImages: {},
       price: 0
     }
     this.upLoader = React.createRef()
@@ -51,9 +55,32 @@ class AddComp extends React.Component<IProps, IState> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
-      
+        const uploadedArr: string[] = []
+        const uploadedImagesObj = this.state.uploadedImages
+        for (const key in uploadedImagesObj) {
+          if (uploadedImagesObj[key]) {
+            uploadedArr.push(uploadedImagesObj[key])
+          }
+        }
+        values.images = uploadedArr.join(',')
+        AdminAPI.Material.addMaterial(values).then(data => {
+          if (data) {
+            message.success('上传成功！')
+          }
+        })
       } else {
-        message.error('上传物料失败, 请重试！')
+        message.error('参数错误，请重新填写！')
+      }
+    })
+  }
+  handleRemoveUploadImage = (file) => {
+    const before = this.state.uploadedImages!
+    AdminAPI.File.delete(before[file.name]).then(data => {
+      if (data) {
+        delete before[file.name]
+        this.setState({
+          uploadedImages: before
+        })
       }
     })
   }
@@ -64,11 +91,22 @@ class AddComp extends React.Component<IProps, IState> {
     }
     if (status === 'done') {
       console.log(info)
+      const before = this.state.uploadedImages!
+      before[info.file.name] = info.file.response.result[0]
+      const current = before
+      this.setState({
+        uploadedImages: current
+      })
       message.success(`${info.file.name} 上传成功.`)
     } else if (status === 'error') {
       message.error(`${info.file.name} 上传失败.`)
     }
   }
+  /**
+   * 获取物料类型
+   *
+   * @memberof AddComp
+   */
   getMaterialTypeList = () => {
     AdminAPI.Material.getMaterialTypes().then((roleRata: any) => {
       this.setState({
@@ -78,22 +116,28 @@ class AddComp extends React.Component<IProps, IState> {
     })
   }
   renderMaterialTypesSelect = () => {
+    const { getFieldDecorator } = this.props.form
     const materialTypeList = this.state.materialTypeList!
     const options = materialTypeList && materialTypeList.map(role => {
       return <Option key={role.id} value={role.id}>{role.name}</Option>
     })
     return (
-      <Select defaultValue={materialTypeList[0].id} value={materialTypeList[0].id} className={'userRoleSelect'} >
-        {options.map(option => {
-          return option
-        })}
-      </Select >
+      <Form.Item
+        label='类型'>
+        {getFieldDecorator('type', {
+          rules: [{ required: true, message: '请选择物料类型' }],
+        })(
+          <Select value={materialTypeList[0].id} className={'userRoleSelect'} >
+            {options}
+          </Select >
+        )}
+      </Form.Item>
     )
   }
 
 
   render() {
-    // const materialTypesSelect = this.state.materialTypeList && this.renderMaterialTypesSelect()
+    const materialTypesSelect = this.state.materialTypeList && this.renderMaterialTypesSelect()
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -135,19 +179,7 @@ class AddComp extends React.Component<IProps, IState> {
                   <Input name='name' placeholder='输入物料名称' />
                 )}
               </Form.Item>
-              <Form.Item
-                label='类型'>
-                {getFieldDecorator('type', {
-                  rules: [{ required: true, message: '请选择物料类型' }],
-                })(
-                  <Select placeholder='Please select a country'>
-                    <Option value='1'>China</Option>
-                    <Option value='2'>U.S.A</Option>
-                  </Select>
-                  // { materialTypesSelect}
-                )}
-
-              </Form.Item>
+              { materialTypesSelect}
               <Form.Item
                 label='存放位置'
               >
@@ -201,7 +233,7 @@ class AddComp extends React.Component<IProps, IState> {
                   rules: [{ required: false, message: '输入金额!' }],
                 })(
                   // <input type='file' id='images' name='images' multiple accept='.jpg,.jpeg,.png,.webp' ref={this.upLoader} />
-                  <Upload.Dragger name='images' multiple action={AdminAPI.File.upload()} accept='.jpg,.jpeg,.png,.webp' onChange={this.handleUploadImage}>
+                  <Upload.Dragger name='images' multiple action={AdminAPI.File.upload()} accept='.jpg,.jpeg,.png,.webp' onRemove={this.handleRemoveUploadImage} onChange={this.handleUploadImage}>
                     <p className='ant-upload-drag-icon'>
                       <Icon type='inbox' />
                     </p>

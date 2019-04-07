@@ -52,7 +52,7 @@ export default class UserList extends React.Component<any, IState> {
             </Breadcrumb>
             <Button type='primary' onClick={this.handleAddUser} ><FaBoxes className='icon' />新增物料</Button>
           </div>
-          <div className='userTable'><Table list={this.state.materialsList} /></div>
+          <div className='materialTable'><Table list={this.state.materialsList} /></div>
         </div>
         }
       </React.Fragment>

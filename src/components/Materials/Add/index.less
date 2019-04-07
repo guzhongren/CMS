@@ -1,16 +1,33 @@
 @import '../../../theme/theme.less';
 
-.addUserForm{
-  margin-top: 16px;
-    .btn{
-          display: flex;
-          justify-content: flex-end;
-          .createUser {
-            width: 100%;
-          }
+.materialList{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .usersNavbar{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 16px;
+      }
+  .addMaterialForm {
+    margin-top: 16px;
+    width: 50%;
+
+    .btn {
+      display: flex;
+      justify-content: flex-end;
+
+      .createUser {
+        width: 100%;
+      }
     }
+
     .number {
       width: 100%;
     }
-    
+
+  }
 }

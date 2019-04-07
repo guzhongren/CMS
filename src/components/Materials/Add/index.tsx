@@ -152,7 +152,7 @@ class AddComp extends React.Component<IProps, IState> {
     return (
       <React.Fragment>
         {this.state.isAdded && <Redirect to='/admin/materials/add' />}
-        {!this.state.isAdded && <div className={'userList'}>
+        {!this.state.isAdded && <div className={'materialList'}>
           <div className='usersNavbar'>
             <Breadcrumb>
               <Breadcrumb.Item href='/#/'>
@@ -168,7 +168,7 @@ class AddComp extends React.Component<IProps, IState> {
               </Breadcrumb.Item>
             </Breadcrumb>
           </div>
-          <div className='addUserForm'>
+          <div className='addMaterialForm'>
             <Form onSubmit={this.handlerAddMaterial} {...formItemLayout}>
 
               <Form.Item

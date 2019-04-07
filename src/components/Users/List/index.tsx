@@ -65,7 +65,7 @@ export default class UserList extends React.Component<any, IState> {
             <Button type='primary' onClick={this.handleAddUser} ><FaUserPlus className='icon' />新增用户</Button>
           </div>
           <div className='userTable'><Table list={this.state.userList} /></div>
-        </div>}
+        </div>
         }
       </React.Fragment>
     )

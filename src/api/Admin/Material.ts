@@ -1,6 +1,6 @@
 import HttpClient from '@utils/HttpClient'
 import apiPrefix from '../index'
-const getMaterialList = (url = `/api/v1/materials`) => {
+const getMaterialList = (url = `${apiPrefix}/materials`) => {
   return HttpClient.get(url, {}).then((data: any[]): any[] => {
     const list: any[] = []
     if (data) {
@@ -36,25 +36,25 @@ const getMaterialList = (url = `/api/v1/materials`) => {
   })
 }
 
-const getMaterialDetail = (id: string, url = `${apiPrefix}materials/`) => {
+const getMaterialDetail = (id: string, url = `${apiPrefix}/materials/`) => {
   return HttpClient.get(`${url}${id}`, {})
 }
-const getMaterialRoles = (url = 'api/v1/roles') => {
+const getMaterialTypes = (url = `${apiPrefix}/materials/types`) => {
   return HttpClient.get(url, {})
 }
-const updateMaterial = (params: any, url = `${apiPrefix}materials/`) => {
+const updateMaterial = (params: any, url = `${apiPrefix}/materials/`) => {
   return HttpClient.put(`${url}${params.id}`, params)
 }
-const deleteMaterial = (id: string, url = `${apiPrefix}materials/`) => {
+const deleteMaterial = (id: string, url = `${apiPrefix}/materials/`) => {
   return HttpClient.delete(`${url}${id}`, {})
 }
-const addMaterial = (params, url = `${apiPrefix}materials`) => {
+const addMaterial = (params, url = `${apiPrefix}/materials`) => {
   return HttpClient.post(url, params)
 }
 export default {
   getMaterialList,
   getMaterialDetail,
-  getMaterialRoles,
+  getMaterialTypes,
   updateMaterial,
   deleteMaterial,
   addMaterial

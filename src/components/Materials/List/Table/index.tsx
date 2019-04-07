@@ -65,19 +65,16 @@ export default class UserTable extends React.Component<IProps, IState> {
       selectedRoleId: selectedValue
     })
   }
-  handleUserUpdate = () => {
-    AdminAPI.User.updateUser(this.state.willUpdateUser).then(data => {
-      if (data) {
-        this.getUserList().then(userList => {
-          this.setState({
-            isDrawerVisible: false,
-            dataSource: userList
-          })
-        })
-        message.info('更新成功！')
-      }
-    }, () => {
-      message.error('更新失败，请重新尝试！')
+  handleMaterialUpdate = () => {
+    AdminAPI.Material.getMaterialList().then((data: any) => {
+      this.setState({
+        isDrawerVisible: false,
+        dataSource: data
+      }, () => {
+        message.success('更新成功！')
+      })
+    }, err => {
+      console.error(err)
     })
     this.setState({
       isDrawerVisible: false
@@ -89,11 +86,11 @@ export default class UserTable extends React.Component<IProps, IState> {
    * @memberof UserTable
    * @returns Promise
    */
-  getUserList = () => {
-    return AdminAPI.User.getUserList().then((data: any) => {
+  getMaterialList = () => {
+    return AdminAPI.Material.getMaterialList().then((data: any) => {
       return data
     }, () => {
-      message.error('获取用户数据错误')
+      message.error('获取物料列表错误')
     })
   }
   onDrawerClose = () => {
@@ -101,13 +98,22 @@ export default class UserTable extends React.Component<IProps, IState> {
       isDrawerVisible: !this.state.isDrawerVisible
     })
   }
-  deleteUser = (id: string) => {
-    AdminAPI.User.deleteUser(id).then(data => {
+  deleteMaterial = (id: string) => {
+    AdminAPI.Material.deleteMaterial(id).then(data => {
       if (data) {
-        message.success('删除成功！')
-        this.getUserList().then(userList => {
+        // const materialList = this.state.dataSource!.map(material => {
+        //   return material.id !== id
+        // })
+        // this.setState({
+        //   dataSource: materialList
+        // }, () => {
+        //     message.success('删除成功！')
+        // })
+        this.getMaterialList().then(materialList => {
           this.setState({
-            dataSource: userList
+            dataSource: materialList
+          }, () => {
+              message.success('删除成功！')
           })
         })
       }
@@ -120,7 +126,7 @@ export default class UserTable extends React.Component<IProps, IState> {
    *
    * @memberof UserTable
    */
-  lookUserDetail(id: string) {
+  lookMaterialDetail(id: string) {
     AdminAPI.User.getUserDetail(id).then((data: any) => {
       if (data) {
         this.setState({
@@ -210,7 +216,7 @@ export default class UserTable extends React.Component<IProps, IState> {
         title: '图片',
         key: 'images',
         render: (imageList) => (
-          < span > <a href='javascript:;' id='' onClick={this.lookUserDetail.bind(this, imageList)}>查看</a></span >
+          < span > <a href='javascript:;' id='' onClick={this.lookMaterialDetail.bind(this, imageList)}>查看</a></span >
         )
       }, {
         title: '数量',
@@ -223,17 +229,17 @@ export default class UserTable extends React.Component<IProps, IState> {
       }, {
         title: '操作',
         key: 'id',
-        render: (user) => (
+        render: (material) => (
           <span>
-            <a href='javascript:;' id='' onClick={this.lookUserDetail.bind(this, user.id)}>更新</a>
+            <a href='javascript:;' id='' onClick={this.lookMaterialDetail.bind(this, material.id)}>更新</a>
             <Divider type='vertical' />
-            <a href='javascript:;' onClick={this.deleteUser.bind(this, user.id)}>删除</a>
+            <a href='javascript:;' onClick={this.deleteMaterial.bind(this, material.id)}>删除</a>
           </span>
         ),   
       }]
     return (
       < React.Fragment >
-        <Table bordered pagination={{ pageSize: 10 }} className={'userListTable'} dataSource={this.state.dataSource} columns={columns} />
+        {this.state.dataSource && <Table bordered pagination={{ pageSize: 10 }} className={'materialListTable'} dataSource={this.state.dataSource} columns={columns} />}
         <Drawer title='详情及更新' className='updateUserInfo'
           width={520}
           onClose={this.onDrawerClose}
@@ -261,7 +267,7 @@ export default class UserTable extends React.Component<IProps, IState> {
             >
               Cancel
             </Button>
-            <Button onClick={this.handleUserUpdate} type='primary'>
+            <Button onClick={this.handleMaterialUpdate} type='primary'>
               Submit
             </Button>
           </div>

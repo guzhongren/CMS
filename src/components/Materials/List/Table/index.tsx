@@ -74,32 +74,43 @@ export default class UserTable extends React.Component<IProps, IState> {
   }
 
   handleTypeChange = (selectedValue: string) => {
-    const currentUser = this.state.materialInfo
     this.setState({
-      willUpdateMaterial: {
-        id: currentUser.id,
-        name: currentUser.name,
-        roleId: selectedValue
-      },
       selectedType: selectedValue
     })
   }
-  // TODO： 更新物料信息
   handleMaterialUpdate = () => {
-
-    AdminAPI.Material.getMaterialList().then((data: any) => {
-      this.setState({
-        isDrawerVisible: false,
-        dataSource: data
-      }, () => {
-        message.success('更新成功！')
-      })
-    }, err => {
-      console.error(err)
-    })
     this.setState({
-      isDrawerVisible: false
+      willUpdateMaterial: {
+        id: this.state.materialInfo.id,
+        name: this.state.name,
+        type: this.state.selectedType,
+        location: this.state.location,
+        provider: this.state.provider,
+        providerLink: this.state.providerLink,
+        count: this.state.count,
+        price: this.state.price,
+      }
+    }, () => {
+      AdminAPI.Material.update(this.state.willUpdateMaterial!).then(result => {
+        if (result) {
+          AdminAPI.Material.getMaterialList().then((data: any) => {
+            this.setState({
+              isDrawerVisible: false,
+              dataSource: data
+            }, () => {
+                this.setState({
+                  isDrawerVisible: false
+                })
+              message.success('更新成功！')
+            })
+          }, err => {
+            console.error(err)
+          })
+          
+        }
+      })
     })
+    
   }
   /**
    * 获取用户列表
@@ -154,15 +165,19 @@ export default class UserTable extends React.Component<IProps, IState> {
           isDrawerVisible: true,
           materialInfo: data,
           name: data.name,
-          location: data.location.Valid ? data.location.String : '',
-          provider: data.provider.Valid ? data.provider.String : '',
-          providerLink: data.providerLink.Valid ? data.providerLink.String : '',
-          count: data.count.Valid ? data.count.Int64 : 0,
-          price: data.price.Valid ? data.price.Float64 : 0,
+          location: data.location,
+          provider: data.provider,
+          providerLink: data.providerLink,
+          count: data.count ? data.count : 0,
+          price: data.price ? data.price : 0,
         }, () => {
           AdminAPI.Material.getMaterialTypes().then((types: any) => {
+            const currentMaterial = this.state.materialInfo
             this.setState({
-              materialTypeList: types
+              materialTypeList: types,
+              selectedType: types.find((type) => {
+                return type.name === currentMaterial.type
+              }).id
             })
           })
         })
@@ -177,19 +192,49 @@ export default class UserTable extends React.Component<IProps, IState> {
    * @memberof UserTable
    */
   renderTypeSelect = () => {
-    const currentMaterial = this.state.materialInfo
-    const defaultType: any = this.state.materialTypeList && this.state.materialTypeList.find((type) => {
-      return type.name === currentMaterial.typeName
-    })
+    // const currentMaterial = this.state.materialInfo
+    // const defaultType: any = this.state.materialTypeList && this.state.materialTypeList.find((type) => {
+    //   return type.name === currentMaterial.type
+    // })
     const options = this.state.materialTypeList && this.state.materialTypeList.map(type => {
       return <Option key={type.id} value={type.id}>{type.name}</Option>
     })
 
     return (
-      <Select defaultValue={defaultType.id} value={this.state.selectedType || defaultType.name} className={'userRoleSelect'} onSelect={this.handleTypeChange} >
+      <Select defaultValue={this.state.selectedType} value={this.state.selectedType } className={'userRoleSelect'} onSelect={this.handleTypeChange} >
         {options}
       </Select >
     )
+  }
+  handlePrice = (value) => {
+    this.setState({
+      price: value
+    })
+  }
+  handleCount = (value) => {
+    this.setState({
+      count: value
+    })
+  }
+  handleProviderLink = (evt) => {
+    this.setState({
+      providerLink: evt.target.value
+    })
+  }
+  handleProvider = (evt) => {
+    this.setState({
+      provider: evt.target.value
+    })
+  }
+  handleLocation = (evt) => {
+    this.setState({
+      location: evt.target.value
+    })
+  }
+  handleName = (evt) => {
+    this.setState({
+      name: evt.target.value
+    })
   }
 
   render() {
@@ -231,10 +276,6 @@ export default class UserTable extends React.Component<IProps, IState> {
         dataIndex: 'createTime',
         key: 'createTime',
       }, {
-        title: '最后更新时间',
-        dataIndex: 'updateTime',
-        key: 'updateTime',
-      }, {
         title: '所属用户',
         dataIndex: 'owner',
         key: 'owner',
@@ -247,11 +288,24 @@ export default class UserTable extends React.Component<IProps, IState> {
       }, {
         title: '数量',
         dataIndex: 'count',
-        key: 'count',   
+        key: 'count',
       }, {
         title: '金额',
         dataIndex: 'price',
-        key: 'price',   
+        key: 'price',
+      }, {
+        title: '最后更新者',
+        key: 'updateUser',
+        render: (info) => (
+          info.updateTime ? <NavLink to={'/admin/users/' + info.updateUserId} >{info.updateUserName}</NavLink> : '--'
+        )
+      }, {
+        title: '最后更新时间',
+        // dataIndex: 'updateTime',
+        key: 'updateTime',
+        render: (info) => (
+          info.updateTime ? info.updateTime : '--'
+        )
       }, {
         title: '操作',
         key: 'id',
@@ -273,7 +327,7 @@ export default class UserTable extends React.Component<IProps, IState> {
           {materialInfo && <Form {...formItemLayout}>
             <Form.Item
               label='名称'>
-              <Input value={this.state.name} />
+              <Input value={this.state.name} onChange={this.handleName} />
             </Form.Item>
             <Form.Item
               label='类型'>
@@ -281,35 +335,35 @@ export default class UserTable extends React.Component<IProps, IState> {
             </Form.Item>
             <Form.Item
               label='存放地址'>
-              <Input value={this.state.location} />
+              <Input value={this.state.location} onChange={this.handleLocation}/>
             </Form.Item>
             <Form.Item
               label='提供者'>
-              <Input value={this.state.provider} />
+              <Input value={this.state.provider} onChange={this.handleProvider}/>
             </Form.Item>
             <Form.Item
               label='提供者链接'>
-              <Input value={this.state.providerLink} />
+              <Input value={this.state.providerLink} onChange={this.handleProviderLink}/>
             </Form.Item>
             <Form.Item
               label='数量'>
-              <InputNumber value={this.state.count} className='number' placeholder='输入物料数量' min={0} max={1000000} step={1} />
+              <InputNumber value={this.state.count} onChange={this.handleCount} className='number' placeholder='输入物料数量' min={0} max={1000000} step={1} />
             </Form.Item>
             <Form.Item
-              label='金额'>
-              <InputNumber value={this.state.price} className='number' placeholder='输入金额' min={0} max={1000000} step={.1} />
+              label='金额(￥)'>
+              <InputNumber value={this.state.price} onChange={this.handlePrice} className='number' placeholder='输入金额' min={0} max={1000000} step={.1} />
             </Form.Item>
             <Form.Item
               label='创建时间'>
-              {(new Date(materialInfo.createTime * 1000)).toLocaleDateString()}
+              {materialInfo.createTime}
             </Form.Item>
             <Form.Item
               label='最后更新时间'>
-              {materialInfo.updateTime.Valid && materialInfo.updateTime.Int64 !== 0 ? (new Date(materialInfo.updateTime.Int64).toLocaleDateString()) : '--'}
+              {materialInfo.updateTime ? materialInfo.updateTime : '--'}
             </Form.Item>
             <Form.Item
               label='最后更新者'>
-              {<NavLink to={'/admin/users/' + materialInfo.updateUser.id} >{materialInfo.updateUser.name}</NavLink>}
+              {materialInfo.updateTime ? <NavLink to={'/admin/users/' + materialInfo.updateUserId} >{materialInfo.updateUserName}</NavLink> : '--'}
             </Form.Item>
           </Form>}
           <div className='userUpdateFooter'>

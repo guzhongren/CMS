@@ -4,32 +4,8 @@ const getMaterialList = (url = `${apiPrefix}/materials`) => {
   return HttpClient.get(url, {}).then((data: any[]): any[] => {
     const list: any[] = []
     if (data) {
-      data.forEach((item: any, id) => {
-        const createTime = new Date(item.createTime * 1000)
-        let updateTime = ''
-        if (item.updateTime.Valid && item.updateTime.Int64 !== 0) {
-          updateTime = (new Date(item.updateTime.Int64 * 1000)).toLocaleDateString()
-        }
-        const imageList = item.images.Valid ? item.images.String.split(',') : false
-        const temp = {
-          'seriesId': id,
-          'name': item.name,
-          'key': item.id,
-          'id': item.id,
-          'type': item.typeName,
-          'location': item.location.Valid ? item.location.String : '',
-          'provider': item.provider.Valid ? item.provider.String : '--',
-          'providerLink': item.providerLink.Valid ? item.providerLink.String : '',
-          'owner': item.owner.name,
-          'ownerId': item.owner.id,
-          'images': imageList,
-          'createTime': `${createTime.getFullYear()}/${createTime.getMonth() + 1}/${createTime.getDay() + 1}`,
-          'updateTime': updateTime,
-          'updateUser': item.updateUser.Valid && item.updateUser.name !== '' ? item.updateUser.name : '--',
-          'count': item.count.Valid ? item.count.Int64 : false,
-          'price': item.price.Valid ? item.price.Float64 : 0
-        }
-        list.push(temp)
+      data.forEach((item: any, key) => {
+        list.push(convert(item, key))
       })
     }
     return list
@@ -40,12 +16,18 @@ const getMaterialList = (url = `${apiPrefix}/materials`) => {
 }
 
 const getMaterialDetail = (id: string, url = `${apiPrefix}/materials/`) => {
-  return HttpClient.get(`${url}${id}`, {})
+  return HttpClient.get(`${url}${id}`, {}).then(data => {
+    if (data) {
+      return convert(data, 0)
+    } else {
+      return false
+    }
+  })
 }
 const getMaterialTypes = (url = `${apiPrefix}/materials/types`) => {
   return HttpClient.get(url, {})
 }
-const updateMaterial = (params: any, url = `${apiPrefix}/materials/`) => {
+const update = (params: any, url = `${apiPrefix}/materials/`) => {
   return HttpClient.put(`${url}${params.id}`, params)
 }
 const deleteMaterial = (id: string, url = `${apiPrefix}/materials/`) => {
@@ -54,11 +36,38 @@ const deleteMaterial = (id: string, url = `${apiPrefix}/materials/`) => {
 const addMaterial = (params, url = `${apiPrefix}/materials`) => {
   return HttpClient.post(url, params)
 }
+const convert = (item, id) => {
+  const createTime = new Date(item.createTime * 1000)
+  let updateTime = ''
+  if (item.updateTime.Valid && item.updateTime.Int64 !== 0) {
+    updateTime = (new Date(item.updateTime.Int64 * 1000)).toLocaleDateString()
+  }
+  const imageList = item.images.Valid ? item.images.String.split(',') : false
+  return {
+    'seriesId': id,
+    'name': item.name,
+    'key': item.id,
+    'id': item.id,
+    'type': item.typeName,
+    'location': item.location.Valid ? item.location.String : false,
+    'provider': item.provider.Valid ? item.provider.String : false,
+    'providerLink': item.providerLink.Valid ? item.providerLink.String : false,
+    'owner': item.owner.name,
+    'ownerId': item.owner.id,
+    'images': imageList,
+    'createTime': `${createTime.getFullYear()}/${createTime.getMonth() + 1}/${createTime.getDay() + 1}`,
+    'updateTime': updateTime !== '' ? updateTime : false,
+    'updateUserName': item.updateUser.name && item.updateUser.name !== '' ? item.updateUser.name : false,
+    'updateUserId': item.updateUser.id && item.updateUser.id !== '' ? item.updateUser.id : false,
+    'count': item.count.Valid ? item.count.Int64 : 0,
+    'price': item.price.Valid ? item.price.Float64 : 0
+  }
+}
 export default {
   getMaterialList,
   getMaterialDetail,
   getMaterialTypes,
-  updateMaterial,
+  update,
   deleteMaterial,
   addMaterial
 }

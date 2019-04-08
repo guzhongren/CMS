@@ -236,10 +236,10 @@ export default class UserTable extends React.Component<IProps, IState> {
               }}
               onClick={this.onDrawerClose}
             >
-              Cancel
+              取消
             </Button>
             <Button onClick={this.handleUserUpdate} type='primary'>
-              Submit
+              提交
             </Button>
           </div>
         </Drawer>

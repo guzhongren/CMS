@@ -90,16 +90,15 @@ class AddComp extends React.Component<IProps, IState> {
       console.log(info.file, info.fileList)
     }
     if (status === 'done') {
-      console.log(info)
       const before = this.state.uploadedImages!
       before[info.file.name] = info.file.response.result[0]
       const current = before
       this.setState({
         uploadedImages: current
       })
-      message.success(`${info.file.name} 上传成功.`)
+      message.success(`图片${info.file.name} 上传成功.`)
     } else if (status === 'error') {
-      message.error(`${info.file.name} 上传失败.`)
+      message.error(`图片${info.file.name} 上传失败.`)
     }
   }
   /**
@@ -246,79 +245,6 @@ class AddComp extends React.Component<IProps, IState> {
                 <Button type='primary' htmlType='submit' className='createUser'>确认</Button>
               </Form.Item>
             </Form>
-            {/* <Form {...formItemLayout}>
-              <Form.Item
-                label={<span><FaAsterisk style={{width: 8, color: 'red'}} />名称</span>}
-              >
-                <Input
-                  placeholder='输入物料名称'
-                  onChange={this.handleUserName}
-                  value={this.state.name}
-                />
-              </Form.Item>
-              <Form.Item
-                label='类型'
-              >
-                {userRoleSelect}
-              </Form.Item>
-              <Form.Item
-                label='存放位置'
-              >
-                <Input
-                  placeholder='输入存放位置'
-                  onChange={this.handleLocation}
-                  value={this.state.location}
-                />
-              </Form.Item>
-              <Form.Item
-                label='提供者'
-              >
-                <Input
-                  placeholder='再次输入提供者信息'
-                  onChange={this.handleProvider}
-                  value={this.state.provider}
-                />
-              </Form.Item>
-              <Form.Item
-                label='提供者链接'
-              >
-                <Input
-                  placeholder='再次输入提供者链接信息'
-                  onChange={this.handleProviderLink}
-                  value={this.state.providerLink}
-                />
-              </Form.Item>
-              <Form.Item
-                label='数量'
-              >
-                <InputNumber
-                  className='number'
-                  placeholder='输入物料数量'
-                  min={0} max={1000000} step={1}
-                  onChange={this.handleCount}
-                  value={this.state.count}
-                />
-              </Form.Item>
-              <Form.Item
-                label='金额'
-              >
-                <InputNumber
-                  className='number'
-                  placeholder='输入金额'
-                  min={0} max={1000000} step={0.1}
-                  onChange={this.handlePrice}
-                  value={this.state.price}
-                />
-              </Form.Item>
-              <Form.Item
-                label='图片'
-              >
-                <input type='file' id='images' multiple accept='.jpg,.jpeg,.png,.webp' ref={this.upLoader} onChange={this.handleUploadImages}/>
-              </Form.Item>
-              <Form.Item className='btn'>
-                <Button type='primary' className='createUser' onClick={this.handlerAddMaterial}>确认</Button>
-              </Form.Item>
-            </Form> */}
           </div>
         </div>
         }

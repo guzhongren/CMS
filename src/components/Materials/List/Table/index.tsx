@@ -5,7 +5,10 @@ import { Table, Divider, Drawer, message, Form, Select, Button, Input, InputNumb
 const Option = Select.Option
 
 import AdminAPI from '@api/Admin'
+import apiPrefix from '@api/index'
 import { NavLink } from 'react-router-dom'
+
+import UpLoadPicturesWall from '../../../UploadPicturesWall'
 interface IProps {
   list?: any[]
 }
@@ -53,7 +56,9 @@ interface IState {
   provider?: string,
   providerLink?: string,
   count?: number,
-  price?: number
+  price?: number,
+  images?: string[],
+  fileList?: any[]
 }
 
 export default class UserTable extends React.Component<IProps, IState> {
@@ -89,6 +94,7 @@ export default class UserTable extends React.Component<IProps, IState> {
         providerLink: this.state.providerLink,
         count: this.state.count,
         price: this.state.price,
+        images: this.state.images!.join(',')
       }
     }, () => {
       AdminAPI.Material.update(this.state.willUpdateMaterial!).then(result => {
@@ -170,14 +176,24 @@ export default class UserTable extends React.Component<IProps, IState> {
           providerLink: data.providerLink,
           count: data.count ? data.count : 0,
           price: data.price ? data.price : 0,
+          images: data.images
         }, () => {
+          
           AdminAPI.Material.getMaterialTypes().then((types: any) => {
             const currentMaterial = this.state.materialInfo
             this.setState({
               materialTypeList: types,
               selectedType: types.find((type) => {
                 return type.name === currentMaterial.type
-              }).id
+              }).id,
+              fileList: this.state.images!.length > 0 ? this.state.images!.map((image, key) => {
+                return {
+                  uid: key,
+                  size: key,
+                  type: 'image',
+                  url: `/${apiPrefix}/static/${image}`,
+                }
+              }) : []
             })
           })
         })
@@ -205,6 +221,12 @@ export default class UserTable extends React.Component<IProps, IState> {
         {options}
       </Select >
     )
+  }
+  handleUploadPictures = (imageList) => {
+    this.setState({
+      images: imageList,
+      fileList: imageList
+    })
   }
   handlePrice = (value) => {
     this.setState({
@@ -365,6 +387,10 @@ export default class UserTable extends React.Component<IProps, IState> {
               label='最后更新者'>
               {materialInfo.updateTime ? <NavLink to={'/admin/users/' + materialInfo.updateUserId} >{materialInfo.updateUserName}</NavLink> : '--'}
             </Form.Item>
+            <Form.Item
+              label='图片'>
+              <UpLoadPicturesWall fileList= {this.state.fileList || []} onChange={this.handleUploadPictures}/>
+            </Form.Item>
           </Form>}
           <div className='userUpdateFooter'>
             <Button
@@ -380,6 +406,7 @@ export default class UserTable extends React.Component<IProps, IState> {
             </Button>
           </div>
         </Drawer>
+
       </React.Fragment >
     )
   }

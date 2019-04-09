@@ -66,6 +66,10 @@ export default class PicturesWall extends React.Component<IProps, IState> {
 
   handleChange = (info) => {
     const status = info.file.status
+    console.log(status)
+    if (status !== 'uploading') {
+      console.log(info.file, info.fileList)
+    }
     if (status === 'done') {
       const before = this.state.fileList!
       const temp = info.file.response.result[0]
@@ -81,6 +85,8 @@ export default class PicturesWall extends React.Component<IProps, IState> {
       }, () => {
           this.props.onChange!(this.state.fileList)
       })
+    } else if (status === 'error') {
+      console.log(`图片${info.file.name} 上传失败.`)
     }
   }
 

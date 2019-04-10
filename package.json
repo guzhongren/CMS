@@ -107,6 +107,7 @@
     "awesome-typescript-loader": "^5.2.0",
     "axios-mock-adapter": "^1.15.0",
     "axios-progress-bar": "^1.2.0",
+    "babel-loader": "^8.0.5",
     "browserslist": "^4.2.0",
     "classnames": "^2.2.6",
     "clean-webpack-plugin": "^2.0.1",

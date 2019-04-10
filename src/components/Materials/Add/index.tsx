@@ -236,8 +236,8 @@ class AddComp extends React.Component<IProps, IState> {
                     <p className='ant-upload-drag-icon'>
                       <Icon type='inbox' />
                     </p>
-                    <p className='ant-upload-text'>Click or drag file to this area to upload</p>
-                    <p className='ant-upload-hint'>Support for a single or bulk upload.</p>
+                    <p className='ant-upload-text'>点击或拖拽进行添加</p>
+                    <p className='ant-upload-hint'>支持单文件或多文件上传</p>
                   </Upload.Dragger>
                 )}
               </Form.Item>

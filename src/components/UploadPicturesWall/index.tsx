@@ -1,8 +1,8 @@
 import React from 'react'
 import { Upload, Icon, Modal } from 'antd'
 import './index.less'
-import AdminAPI from '@api/Admin'
-import apiPrefix from '@api/index'
+// import AdminAPI from '@api/Admin'
+// import apiPrefix from '@api/index'
 
 interface IIamge {
   uid: string,
@@ -76,14 +76,14 @@ export default class PicturesWall extends React.Component<IProps, IState> {
       before.push({
         uid: temp,
         size: 1,
-        url: `/${apiPrefix}/static/${temp}`,
+        url: `/api/v1/static/${temp}`,
         name: temp,
         type: 'image',
       })
       this.setState({
         fileList: before
       }, () => {
-          this.props.onChange!(this.state.fileList)
+          // this.props.onChange!(this.state.fileList)
       })
     } else if (status === 'error') {
       console.log(`图片${info.file.name} 上传失败.`)
@@ -102,7 +102,7 @@ export default class PicturesWall extends React.Component<IProps, IState> {
       <div className='clearfix'>
         <Upload
           name='images' multiple accept='.jpg,.jpeg,.png,.webp'
-          action= {AdminAPI.File.upload()}
+          action={'/api/v1/file/upload'}
           listType='picture-card'
           fileList={fileList!}
           onPreview={this.handlePreview}

@@ -1,11 +1,14 @@
 import React from 'react'
 import './index.less'
-import { Table, Divider, Drawer, message, Form, Select, Button, Input, InputNumber } from 'antd'
+import { Table, Divider, Drawer, message, Form, Select, Button, Input, InputNumber, Modal, Carousel } from 'antd'
 
 const Option = Select.Option
 
 import AdminAPI from '@api/Admin'
+import apiPrefix from '@api/index'
 import { NavLink } from 'react-router-dom'
+
+// import UpLoadPicturesWall from '../../../UploadPicturesWall'
 interface IProps {
   list?: any[]
 }
@@ -53,7 +56,10 @@ interface IState {
   provider?: string,
   providerLink?: string,
   count?: number,
-  price?: number
+  price?: number,
+  images?: string[],
+  fileList?: any[],
+  modalVisible?: boolean
 }
 
 export default class UserTable extends React.Component<IProps, IState> {
@@ -62,7 +68,8 @@ export default class UserTable extends React.Component<IProps, IState> {
     this.state = {
       dataSource: this.props.list,
       isDrawerVisible: false,
-      materialInfo: null
+      materialInfo: null,
+      modalVisible: false
     }
   }
   componentWillReceiveProps(nextProps: IProps) {
@@ -89,6 +96,7 @@ export default class UserTable extends React.Component<IProps, IState> {
         providerLink: this.state.providerLink,
         count: this.state.count,
         price: this.state.price,
+        images: this.state.images!.join(',')
       }
     }, () => {
       AdminAPI.Material.update(this.state.willUpdateMaterial!).then(result => {
@@ -153,6 +161,19 @@ export default class UserTable extends React.Component<IProps, IState> {
       message.error('删除失败！')
     })
   }
+  handleModalClose = () => {
+    this.setState({
+      modalVisible: false
+    })
+  }
+  lookMaterialImages = (images) => {
+    if (images) {
+      this.setState({
+        modalVisible: true,
+        images
+      })
+    }
+  }
   /**
    * 查看物料信息
    *
@@ -170,14 +191,24 @@ export default class UserTable extends React.Component<IProps, IState> {
           providerLink: data.providerLink,
           count: data.count ? data.count : 0,
           price: data.price ? data.price : 0,
+          images: data.images
         }, () => {
+          
           AdminAPI.Material.getMaterialTypes().then((types: any) => {
             const currentMaterial = this.state.materialInfo
             this.setState({
               materialTypeList: types,
               selectedType: types.find((type) => {
                 return type.name === currentMaterial.type
-              }).id
+              }).id,
+              fileList: this.state.images!.length > 0 ? this.state.images!.map((image, key) => {
+                return {
+                  uid: key,
+                  size: key,
+                  type: 'image',
+                  url: `/${apiPrefix}/static/${image}`,
+                }
+              }) : []
             })
           })
         })
@@ -205,6 +236,12 @@ export default class UserTable extends React.Component<IProps, IState> {
         {options}
       </Select >
     )
+  }
+  handleUploadPictures = (imageList) => {
+    this.setState({
+      images: imageList,
+      fileList: imageList
+    })
   }
   handlePrice = (value) => {
     this.setState({
@@ -282,8 +319,8 @@ export default class UserTable extends React.Component<IProps, IState> {
       }, {
         title: '图片',
         key: 'images',
-        render: (imageList) => (
-          < span > <a href='javascript:;' id='' onClick={this.lookMaterialDetail.bind(this, imageList)}>查看</a></span >
+        render: (info) => (
+          < span > <a href='javascript:;' id='' onClick={this.lookMaterialImages.bind(this, info.images)}>查看</a></span >
         )
       }, {
         title: '数量',
@@ -297,7 +334,7 @@ export default class UserTable extends React.Component<IProps, IState> {
         title: '最后更新者',
         key: 'updateUser',
         render: (info) => (
-          info.updateTime ? <NavLink to={'/admin/users/' + info.updateUserId} >{info.updateUserName}</NavLink> : '--'
+          info.updateTime ? info.updateUserName : '--'
         )
       }, {
         title: '最后更新时间',
@@ -319,6 +356,13 @@ export default class UserTable extends React.Component<IProps, IState> {
       }]
     return (
       < React.Fragment >
+        <Modal visible={this.state.modalVisible} footer={null} onCancel={this.handleModalClose}>
+          <Carousel autoplay>
+            {this.state.images && this.state.images.map((name) => {
+              return <div key={name} className='container'><img className='img' src={`/${apiPrefix}/static/${name}`} /></div>
+            })}
+          </Carousel>
+        </Modal>
         {this.state.dataSource && <Table bordered pagination={{ pageSize: 10 }} className={'materialListTable'} dataSource={this.state.dataSource} columns={columns} />}
         <Drawer title='物料详情及更新' className='updateMaterialInfo'
           width={520}
@@ -365,6 +409,10 @@ export default class UserTable extends React.Component<IProps, IState> {
               label='最后更新者'>
               {materialInfo.updateTime ? <NavLink to={'/admin/users/' + materialInfo.updateUserId} >{materialInfo.updateUserName}</NavLink> : '--'}
             </Form.Item>
+            {/* <Form.Item
+              label='图片'>
+              <UpLoadPicturesWall fileList= {this.state.fileList || []} onChange={this.handleUploadPictures}/>
+            </Form.Item> */}
           </Form>}
           <div className='userUpdateFooter'>
             <Button
@@ -380,6 +428,7 @@ export default class UserTable extends React.Component<IProps, IState> {
             </Button>
           </div>
         </Drawer>
+
       </React.Fragment >
     )
   }

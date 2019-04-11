@@ -49,6 +49,7 @@ $ yarn dev
 ```shell
 $ yarn build
 ...
+# 将 dist下的文件 copy 到go 程序的 App 目录下
 ```
 
 ## 图标库

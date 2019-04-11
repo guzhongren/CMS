@@ -4,7 +4,7 @@ import { Button, Breadcrumb, Form, Input, message, Select } from 'antd'
 const Option = Select.Option
 import { Redirect } from 'react-router-dom'
 import AdminAPI from '@api/Admin'
-import { FaHome, FaUsers, FaUserPlus, FaKey } from 'react-icons/fa'
+import { FaHome, FaUsers, FaUserPlus } from 'react-icons/fa'
 interface IState {
   userList?: any[],
   isAddUser?: boolean,
@@ -162,7 +162,6 @@ export default class Add extends React.Component<any, IState> {
               >
                 <Input
                   placeholder='输入用户名'
-                  prefix={<FaUserPlus style={{ color: 'rgba(0,0,0,.25)' }} />}
                   onChange={this.handleUserName}
                   value= {this.state.userName}
                 />
@@ -178,7 +177,6 @@ export default class Add extends React.Component<any, IState> {
                 <Input
                   type='password'
                   placeholder='输入密码'
-                  prefix={<FaKey style={{ color: 'rgba(0,0,0,.25)' }} />}
                   onChange={this.handlePassword}
                   value= {this.state.password}
                 />
@@ -189,7 +187,6 @@ export default class Add extends React.Component<any, IState> {
                 <Input
                   type='password'
                   placeholder='再次输入密码'
-                  prefix={<FaKey style={{ color: 'rgba(0,0,0,.25)' }} />}
                   onChange={this.handlePassword1}
                   value={this.state.repeatPassword}
                 />

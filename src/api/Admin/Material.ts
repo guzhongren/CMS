@@ -42,7 +42,7 @@ const convert = (item, id) => {
   if (item.updateTime.Valid && item.updateTime.Int64 !== 0) {
     updateTime = (new Date(item.updateTime.Int64 * 1000)).toLocaleDateString()
   }
-  const imageList = item.images.Valid ? item.images.String.split(',') : false
+  const imageList = item.images.Valid && item.images.String !== '' ? item.images.String.split(',') : false
   return {
     'seriesId': id,
     'name': item.name,

@@ -91,70 +91,71 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.(jsx|tsx|js|ts)$/,
-      loader: 'awesome-typescript-loader',
-      exclude: /node_modules/
-    },
-    {
-      enforce: 'pre',
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: [
-        'happypack/loader?id=babel'
-      ]
-    },
-    {
-      test: /\.(le|sa|sc|c)ss$/,
-      use: [
-        'css-hot-loader',
-        MiniCssExtractPlugin.loader,
-        {
-          loader: 'css-loader',
-          options: {
-            importLoaders: 1,
-            // modules: true,
-            localIdentName: '[local]_[hash:base64:6]'
+        test: /\.(jsx|tsx|js|ts)$/,
+        loader: 'awesome-typescript-loader',
+        exclude: /node_modules/
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          'source-map-loader',
+          'happypack/loader?id=babel'
+        ]
+      },
+      {
+        test: /\.(le|sa|sc|c)ss$/,
+        use: [
+          'css-hot-loader',
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              // modules: true,
+              localIdentName: '[local]_[hash:base64:6]'
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: !isProduction,
+              ident: 'postcss'
+            }
+          },
+          {
+            loader: 'resolve-url-loader'
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+              sourceMap: !isProduction
+            }
           }
-        },
-        {
-          loader: 'postcss-loader',
+        ]
+      },
+      {
+        test: /\.(png|jpg|gif|svg|ico|cur)(\?[=a-z0-9]+)?$/,
+        use: [{
+          loader: 'url-loader',
           options: {
-            sourceMap: !isProduction,
-            ident: 'postcss'
+            limit: 8192,
+            name: 'static/images/[hash:6].[ext]',
+            fallback: 'file-loader'
           }
-        },
-        {
-          loader: 'resolve-url-loader'
-        },
-        {
-          loader: 'less-loader',
+        }]
+      },
+      {
+        test: /\.(ttf|eot|otf|woff(2)?)(\?[\s\S]+)?$/,
+        use: [{
+          loader: 'file-loader',
           options: {
-            javascriptEnabled: true,
-            sourceMap: !isProduction
+            name: 'static/fonts/[hash:6].[ext]'
           }
-        }
-      ]
-    },
-    {
-      test: /\.(png|jpg|gif|svg|ico|cur)(\?[=a-z0-9]+)?$/,
-      use: [{
-        loader: 'url-loader',
-        options: {
-          limit: 8192,
-          name: 'static/images/[hash:6].[ext]',
-          fallback: 'file-loader'
-        }
-      }]
-    },
-    {
-      test: /\.(ttf|eot|otf|woff(2)?)(\?[\s\S]+)?$/,
-      use: [{
-        loader: 'file-loader',
-        options: {
-          name: 'static/fonts/[hash:6].[ext]'
-        }
-      }]
-    }
+        }]
+      }
     ]
   },
   target: 'web',

@@ -6,6 +6,7 @@ const { Sider, Content } = Layout
 const SubMenu = Menu.SubMenu
 import logo from './img/logo.png'
 import AdminContent from './AdminContent'
+import Statistic from './System'
 import {
   NavLink,
   Redirect,
@@ -58,7 +59,7 @@ const Admin = ({ match }) => {
   )
 }
 const Index = () => (
-  <div>Hello Admin Dashboard</div>
+  <Statistic />
 )
 
 export default Admin

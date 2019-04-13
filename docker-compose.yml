@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  summit:
-    image: guzhongren/summit
+  cms:
+    image: guzhongren/cms
     ports:
       - "80:80"
     deploy:

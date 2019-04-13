@@ -1,6 +1,6 @@
 const config = {
   mapOptions: {
-    center: [108.89124, 34.228625],
+    center: [108.93, 34.27],
     zoom: 15,
     baseLayer: {
       urlTemplate: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -8,7 +8,7 @@ const config = {
           attribution: '&copy; <a href="http://www.osm.org" target="_blank">OpenStreetMap</a> contributors'
     },
     attribution: {
-      'content': '&copy;2018 <a target="_blank" href="http://www.summit.com.cn">Summit</a>'
+      'content': `&copy;${(new Date()).getFullYear()} <a target="_blank" href="https://github.com/freeCodeCamp-XiAn">cms</a>`
     }
   }
 }

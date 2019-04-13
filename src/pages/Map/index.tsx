@@ -38,7 +38,7 @@ export default class Map extends React.Component<IProps, IState> {
 
   render() {
     const mapOption = {
-      center: [116.581548, 35.404373],
+      center: [108.93, 34.27],
       zoom: 10,
       scaleControl: {
         'maxWidth': 100,

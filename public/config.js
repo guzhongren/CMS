@@ -1,4 +1,4 @@
 
 var ConfigExt = {
-  projectName: 'Platform'
+  projectName: 'CMS'
 }

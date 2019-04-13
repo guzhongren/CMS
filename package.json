@@ -18,7 +18,7 @@
     "release": "standard-version --release-as patch",
     "minorRelease": "standard-version --release-as minor",
     "majorRelease": "standard-version --release-as major",
-    "buildImage": "docker build -t cms . && docker tag summit guzhongren/cms:latest",
+    "buildImage": "docker build -t cms . && docker tag cms guzhongren/cms:latest",
     "pushImage": "docker push guzhongren/cms:latest"
   },
   "husky": {

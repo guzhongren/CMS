@@ -29,7 +29,7 @@ export default {
   GetUserInfo: () => {
     const sessionValue = window.sessionStorage.getItem(USERKEY)!
     if (sessionValue) {
-      return sessionValue.slice(1, -1).replace(/\\/g, '')
+      return JSON.parse(sessionValue.slice(1, -1).replace(/\\/g, ''))
     } else {
       return null
     }

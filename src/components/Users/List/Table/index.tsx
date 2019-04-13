@@ -3,7 +3,7 @@ import './index.less'
 import { Table, Divider, Drawer, message, Form, Select, Button } from 'antd'
 
 const Option = Select.Option
-
+import LoginUtils from '@utils/Login'
 import AdminAPI from '@api/Admin'
 interface IProps {
   list?: any[]
@@ -174,6 +174,7 @@ export default class UserTable extends React.Component<IProps, IState> {
 
   render() {
     const userInfo = this.state.userInfo!
+    const currentUser = LoginUtils.GetUserInfo()
     const userRoleSelect = userInfo && this.state.userRoleList && this.renderUserRoleSelect()
     const formItemLayout = {
       labelCol: {
@@ -202,9 +203,9 @@ export default class UserTable extends React.Component<IProps, IState> {
       key: 'id',
       render: (user) => (
         <span>
-          <a href='javascript:;' id='' onClick={this.lookUserDetail.bind(this, user.id)}>更新</a>
+          {user.id === currentUser.id || user.name === 'admin' ? '更新' : <a href='javascript:;' id='' onClick={this.lookUserDetail.bind(this, user.id)}>更新</a>}
           <Divider type='vertical' />
-          <a href='javascript:;' onClick={this.deleteUser.bind(this, user.id)}>删除</a>
+          {user.id === currentUser.id || user.name === 'admin' ? '删除' : <a href='javascript:;' onClick={this.deleteUser.bind(this, user.id)}>删除</a> }
         </span>
       ),
     }]

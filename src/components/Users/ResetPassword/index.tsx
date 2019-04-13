@@ -54,6 +54,9 @@ export default class Add extends React.Component<any, IState> {
       message.error('更新密码失败！')
     })
   }
+  componentDidMount() {
+    message.warning('重置密码后, 系统会自动退出哦😯')
+  }
   
   render() {
     const formItemLayout = {

@@ -46,10 +46,10 @@ export default class NavBar extends React.Component<IProps, IState> {
   }
 
   handleLogout = () => {
-    LoginUtils.DeleteToken().then(() => {
-      this.setState({
-        isLogin: false
-      })
+    LoginUtils.DeleteToken()
+    LoginUtils.DeleteUserInfo()
+    this.setState({
+      isLogin: false
     })
   }
   /**

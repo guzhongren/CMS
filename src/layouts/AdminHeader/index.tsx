@@ -31,10 +31,9 @@ export default class AdminHeader extends React.Component<IProps, IState> {
   }
 
   logOut = () => {
-    LoginUtils.DeleteToken().then(() => {
-      this.setState({
-        isLogin: false
-      })
+    LoginUtils.DeleteToken()
+    this.setState({
+      isLogin: false
     })
   }
   render() {

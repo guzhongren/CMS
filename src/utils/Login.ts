@@ -5,39 +5,45 @@ const KEY = 'token'
 const USERKEY = 'user'
 export default {
   SetToken: (token) => {
-    window.sessionStorage.setItem(KEY, JSON.stringify(token))
+    setCookies(KEY, JSON.stringify(token), 3)
   },
   GetToken: () => {
-    const sessionValue = window.sessionStorage.getItem(KEY)!
-    if (sessionValue) {
-      return sessionValue.slice(1, -1)
-    } else {
-      return null
-    }
+    return getCookies(KEY)
   },
   
   DeleteToken: () => {
-    return new Promise((resolve) => {
-      window.sessionStorage.removeItem(KEY)
-      resolve({ 'isDeleted': true })
-    })
+    setCookies(KEY, '', -1)
   },
-  // ==========用户信息=========
   SetUserInfo: (userInfo) => {
-    window.sessionStorage.setItem(USERKEY, JSON.stringify(userInfo))
+    setCookies(USERKEY, JSON.stringify(userInfo), 3)
   },
   GetUserInfo: () => {
-    const sessionValue = window.sessionStorage.getItem(USERKEY)!
-    if (sessionValue) {
-      return JSON.parse(sessionValue.slice(1, -1).replace(/\\/g, ''))
-    } else {
-      return null
-    }
+    return getCookies(USERKEY)
   },
   DeleteUserInfo: () => {
-    return new Promise((resolve) => {
-      window.sessionStorage.removeItem(KEY)
-      resolve({ 'isDeleted': true })
-    })
+    setCookies(USERKEY, '', -1)
   }
 }
+
+const setCookies = (key, value, expireDays) => {
+  const date = new Date()
+  date.setDate(date.getDate() + expireDays)
+  document.cookie = key + '=' + escape(value) +
+    ((expireDays === null) ? '' : ';expires=' + date.toUTCString())
+}
+
+const getCookies = (key) => {
+  if (document.cookie.length > 0) {
+    let cStart = document.cookie.indexOf(key + '=')
+    if (cStart !== -1) {
+      cStart = cStart + key.length + 1
+      let cEnd = document.cookie.indexOf(';', cStart)
+      if (cEnd === -1) { cEnd = document.cookie.length }
+      return JSON.parse(unescape(document.cookie.substring(cStart, cEnd)))
+    }
+  }
+  return false
+}
+
+
+

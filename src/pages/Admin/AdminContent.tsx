@@ -4,6 +4,9 @@ import MaterialList from '@components/Materials/List'
 import UserResetPassword from '@components/Users/ResetPassword'
 import AddUser from '@components/Users/Add'
 import AddMaterial from '@components/Materials/Add'
+import LoginUtils from '@utils/Login'
+import NoMatch from '@pages/NoMatch'
+
 import {
   Redirect,
   Route,
@@ -11,12 +14,14 @@ import {
 } from 'react-router-dom'
 
 const AdminContent = ({ match }) => {
+  const currentUser = LoginUtils.GetUserInfo()
+  const isAdmin = currentUser.role === 'admin'
   let willLoadingComponent: any
   let adminContentDetail: any
   switch (match.params.type) {
     case 'users':
       willLoadingComponent = UserList
-      adminContentDetail = AddUser
+      adminContentDetail = isAdmin ? AddUser : NoMatch
       break
     case 'materials':
       willLoadingComponent = MaterialList

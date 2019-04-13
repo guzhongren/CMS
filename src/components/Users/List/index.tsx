@@ -5,6 +5,7 @@ import { Button, Breadcrumb } from 'antd'
 import { Redirect } from 'react-router-dom'
 import AdminAPI from '@api/Admin'
 import { FaHome, FaUsers, FaUserPlus } from 'react-icons/fa'
+import LoginUtils from '@utils/Login'
 interface IState {
   userList?: any[],
   isAddUser?: boolean
@@ -48,6 +49,7 @@ export default class UserList extends React.Component<any, IState> {
   }
 
   render() {
+    const currentUser = LoginUtils.GetUserInfo()
     return (
       <React.Fragment>
         {this.state.isAddUser && <Redirect to='/#/admin/users/add'/>}
@@ -62,7 +64,7 @@ export default class UserList extends React.Component<any, IState> {
                 <span>用户</span>
               </Breadcrumb.Item>
             </Breadcrumb>
-            <Button type='primary' onClick={this.handleAddUser} ><FaUserPlus className='icon' />新增用户</Button>
+            {currentUser.role === 'admin' && <Button type='primary' onClick={this.handleAddUser} ><FaUserPlus className='icon' />新增用户</Button>}
           </div>
           <div className='userTable'><Table list={this.state.userList} /></div>
         </div>

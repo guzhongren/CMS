@@ -203,9 +203,9 @@ export default class UserTable extends React.Component<IProps, IState> {
       key: 'id',
       render: (user) => (
         <span>
-          {user.id === currentUser.id || user.name === 'admin' ? '更新' : <a href='javascript:;' id='' onClick={this.lookUserDetail.bind(this, user.id)}>更新</a>}
+          {user.id === currentUser.id || user.name === 'admin' || user.role === 'admin' ? '更新' : <a href='javascript:;' onClick={this.lookUserDetail.bind(this, user.id)}>更新</a>}
           <Divider type='vertical' />
-          {user.id === currentUser.id || user.name === 'admin' ? '删除' : <a href='javascript:;' onClick={this.deleteUser.bind(this, user.id)}>删除</a> }
+          {user.id === currentUser.id || user.name === 'admin' || user.role === 'admin' ? '删除' : <a href='javascript:;' onClick={this.deleteUser.bind(this, user.id)}>删除</a> }
         </span>
       ),
     }]

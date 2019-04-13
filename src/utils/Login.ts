@@ -8,7 +8,12 @@ export default {
     setCookies(KEY, JSON.stringify(token), 3)
   },
   GetToken: () => {
-    return getCookies(KEY)
+    const token = getCookies(KEY)
+    if (token && token !== '') {
+      return token
+    } else {
+      return false
+    }
   },
   
   DeleteToken: () => {
@@ -18,7 +23,12 @@ export default {
     setCookies(USERKEY, JSON.stringify(userInfo), 3)
   },
   GetUserInfo: () => {
-    return getCookies(USERKEY)
+    const info = getCookies(USERKEY)
+    if (info !== '') {
+      return JSON.parse(info)
+    } else {
+      return false
+    }
   },
   DeleteUserInfo: () => {
     setCookies(USERKEY, '', -1)
@@ -42,7 +52,7 @@ const getCookies = (key) => {
       return JSON.parse(unescape(document.cookie.substring(cStart, cEnd)))
     }
   }
-  return false
+  return ''
 }
 
 

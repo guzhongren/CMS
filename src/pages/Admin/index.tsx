@@ -7,6 +7,7 @@ const SubMenu = Menu.SubMenu
 import logo from './img/logo.png'
 import AdminContent from './AdminContent'
 import Statistic from './System'
+import LoginUtils from '@utils/Login'
 import {
   NavLink,
   Redirect,
@@ -16,6 +17,8 @@ import {
 } from 'react-router-dom'
 
 const Admin = ({ match }) => {
+  const currentUser = LoginUtils.GetUserInfo()
+  const isAdmin = currentUser.role === 'admin'
   return (
     <Layout>
       <Sider className={'layout-sider'} theme='dark' width='256px'>
@@ -27,8 +30,8 @@ const Admin = ({ match }) => {
             key='sub1'
             title={<span><Icon type='users' /><span>成员</span></span>}
           >
-            <Menu.Item key='3'><Link to={`${match.url}/users`}>所有成员</Link ></Menu.Item>
-            <Menu.Item key='add'><Link to={`${match.url}/users/add`}>新增成员</Link ></Menu.Item>
+            <Menu.Item key='all'><Link to={`${match.url}/users`}>所有成员</Link ></Menu.Item>
+            {isAdmin && <Menu.Item key='add'><Link to={`${match.url}/users/add`}>新增成员</Link ></Menu.Item>}
             <Menu.Item key='resetPassword'><Link to={`${match.url}/resetPassword`}>修改密码</Link ></Menu.Item>
           </SubMenu>
           <SubMenu

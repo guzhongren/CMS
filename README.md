@@ -1,19 +1,26 @@
-# Summit Web FrameWork
+# CMS Web FrameWork
+
+## Todo
+
+* [ ] 修复相互改角色的 bug
+* [ ] 修改密码 bug
+* [ ] 后端 API 根据角色进行鉴权与授权
+* [ ] 上传文件后 UI 应该发生变化，比如跳转到 list
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![Storybook](https://raw.githubusercontent.com/storybooks/press/6baccd1d177c070b24503df97ccb1d790499626f/badges/storybook.svg)](https://andorlab.summit.com)
-[![Build Status](https://travis-ci.org/beef-noodles/PlatformWeb.svg?branch=master)](https://travis-ci.org/beef-noodles/PlatformWeb)
-[![codecov](https://codecov.io/gh/beef-noodles/PlatformWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/beef-noodles/PlatformWeb)
-[![GitHub stars](https://img.shields.io/github/stars/beef-noodles/PlatformWeb.svg)](https://github.com/beef-noodles/PlatformWeb/stargazers)
+[![Build Status](https://travis-ci.org/guzhongren/CMS.svg?branch=master)](https://travis-ci.org/guzhongren/CMS)
+[![codecov](https://codecov.io/gh/guzhongren/CMS/branch/master/graph/badge.svg)](https://codecov.io/gh/guzhongren/CMS)
+[![GitHub stars](https://img.shields.io/github/stars/guzhongren/CMS.svg)](https://github.com/guzhongren/CMS/stargazers)
 
 [![](https://img.shields.io/badge/Node-V10%2B-green.svg)](https://nodejs.org/zh-cn/)
 [![](https://img.shields.io/badge/React-V16%2B-blue.svg)](https://reactjs.org/)
 [![](https://img.shields.io/badge/Webpack-V4%2B-yellowgreen.svg)](https://webpack.js.org/)
 [![](https://img.shields.io/badge/antd-v3.11.0-blue.svg)](https://ant.design/index-cn)
 
-[![GitHub license](https://img.shields.io/github/license/beef-noodles/PlatformWeb.svg)](https://github.com/beef-noodles/PlatformWeb/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/guzhongren/CMS.svg)](https://github.com/guzhongren/CMS/blob/master/LICENSE)
 
 ## Node版本
 
@@ -24,7 +31,7 @@
 ## 获取
 
 ```shell
-$ git clone -b summitWeb https://github.com/guzhongren/FrontEndStudy.git
+$ git clone -b summitWeb https://github.com/guzhongren/CMS.git
 ...
 ```
 
@@ -32,9 +39,9 @@ $ git clone -b summitWeb https://github.com/guzhongren/FrontEndStudy.git
 
 ```shell
 # use npm
-$ cd FrontEndStudy && npm install
+$ cd CMS && npm install
 # use yarn
-$ cd FrontEndStudy && yarn install
+$ cd CMS && yarn
 ```
 
 ## 启动
@@ -82,7 +89,9 @@ import AjaxTest from '@components/Ajax'
 
 测试框架使用[jest](https://jestjs.io/zh-Hans/)和axios模拟框架[axios-mock-adapter](https://www.npmjs.com/package/axios-mock-adapter),　示例地址为./src/__test__/utils/HttpClient.spec.ts
 
-案例使用[storybook](https://storybook.js.org/)来呈现，编写规则为参考 **Demo**, 辅助类库为[@storybook/addon-knobs/react](https://www.npmjs.com/package/@kadira/storybook-addon-knobs),可以进行数据交互
+## 设计图
+
+[CMS UI](https://idoc.mockplus.cn/team/kthcspgrtk)
 
 ## 支持环境
 

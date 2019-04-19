@@ -83,7 +83,7 @@ export default class NavBar extends React.Component<IProps, IState> {
   handleLoginStatus = (isLogin: boolean) => {
     this.setState({
       isLogin,
-      isLoginModalVisible: !isLogin
+      isLoginModalVisible: false
     })
   }
   handleClick = (e) => {

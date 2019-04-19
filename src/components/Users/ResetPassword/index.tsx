@@ -36,7 +36,7 @@ export default class Add extends React.Component<any, IState> {
       message.error('密码无效！')
       return
     }
-    const userInfo = JSON.parse(LoginUtils.GetUserInfo()!)
+    const userInfo = LoginUtils.GetUserInfo()
     const params = {
       id: userInfo.id,
       password: this.state.password

@@ -5,7 +5,7 @@
 * [X] 修复相互改角色的 bug
 * [X] 修改密码 bug
 * [ ] 后端 API 根据角色进行鉴权与授权
-* [ ] 上传文件后 UI 应该发生变化，比如跳转到 list
+* [X] 上传文件后 UI 应该发生变化，比如跳转到 list
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 

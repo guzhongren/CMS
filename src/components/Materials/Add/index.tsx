@@ -65,7 +65,11 @@ class AddComp extends React.Component<IProps, IState> {
         values.images = uploadedArr.join(',')
         AdminAPI.Material.addMaterial(values).then(data => {
           if (data) {
-            message.success('上传成功！')
+            this.setState({
+              isAdded: true
+            }, () => {
+                message.success('上传成功！')
+            })
           }
         })
       } else {
@@ -150,7 +154,7 @@ class AddComp extends React.Component<IProps, IState> {
     const { getFieldDecorator } = this.props.form
     return (
       <React.Fragment>
-        {this.state.isAdded && <Redirect to='/admin/materials/add' />}
+        {this.state.isAdded && <Redirect to='/admin/materials' />}
         {!this.state.isAdded && <div className={'materialList'}>
           <div className='usersNavbar'>
             <Breadcrumb>

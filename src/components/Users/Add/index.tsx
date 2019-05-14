@@ -50,7 +50,11 @@ export default class Add extends React.Component<any, IState> {
           password: '',
           repeatPassword: ''
         }, () => {
-          message.success('添加用户成功！')
+          this.setState({
+            isAddUser: true
+          }, () => {
+              message.success('添加用户成功！')
+          })
         })
       }
     }, () => {
@@ -138,7 +142,7 @@ export default class Add extends React.Component<any, IState> {
     }
     return (
       <React.Fragment>
-        {this.state.isAddUser && <Redirect to='/admin/users/add' />}
+        {this.state.isAddUser && <Redirect to='/admin/users' />}
         {!this.state.isAddUser && <div className={'userList'}>
           <div className='usersNavbar'>
             <Breadcrumb>

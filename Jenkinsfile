@@ -19,12 +19,11 @@ pipeline {
                 sh 'npm install -g yarn'
                 sh 'npm install -g jest'
                 sh 'yarn -v'
+                sh 'yarn'
             }
         }
         stage('Test') {
             steps {
-                sh 'ls -a'
-                cd 'CMS'
                 sh 'yarn test'
             }
         }

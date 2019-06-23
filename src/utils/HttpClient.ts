@@ -41,7 +41,9 @@ function apiAxios(method: string, url: string, params) {
       if (token) {
         axios.defaults.headers.Authorization = `Bearer ${token}`
       } else {
-        window.location.href = '/login'
+        // TODO: 需要跳转到登录页
+        console.warn('跳转到登录页')
+        // window.location.href = '/login'
       }
     }
     

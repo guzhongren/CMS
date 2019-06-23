@@ -50,7 +50,7 @@
     "setupFiles": [
       "jest-canvas-mock"
     ],
-    "setupTestFrameworkScriptFile": "./setupTests.ts",
+    "setupFilesAfterEnv": ["./setupTests.ts"],
     "testRegex": "\\.(test|spec)\\.(ts|tsx|jsx|js)$",
     "moduleNameMapper": {
       "\\.(less|scss|css|jpg|png|svg)$": "jest-css-modules",

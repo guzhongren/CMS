@@ -7,7 +7,7 @@ pipeline {
         string(name: 'deployment_name', defaultValue: 'frontend', description: 'deployment 名称')
         string(name: 'container_name', defaultValue: 'frontend', description: '容器名称')
     }
-    tools {NodeJS "NodeJS 12.4.0"}
+    tools {nodejs "NodeJS 12.4.0"}
     stages {
         stage('获取SCM') {
             steps{

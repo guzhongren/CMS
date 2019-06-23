@@ -17,6 +17,7 @@ pipeline {
         stage('Env') {
             steps {
                 sh 'npm install -g yarn'
+                sh 'npm install -g jest'
                 sh 'yarn -v'
             }
         }

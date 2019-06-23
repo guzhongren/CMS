@@ -7,20 +7,22 @@ pipeline {
         string(name: 'deployment_name', defaultValue: 'frontend', description: 'deployment 名称')
         string(name: 'container_name', defaultValue: 'frontend', description: '容器名称')
     }
-    tools {node "go1.12"}
+    tools {node "NodeJS 12.4.0"}
     stages {
         stage('获取SCM') {
             steps{
                 checkout scm
             }
         }
+        stage('Env') {
+            steps {
+                sh 'npm install -g yarn'
+                sh 'yarn -v'
+            }
+        }
         stage('Test') {
             steps {
-                sh 'export CGO_ENABLED=0'
-                sh 'export GO111MODULE=on'
-                sh 'export GOPROXY=https://goproxy.cn'
-                sh 'go clean -cache'
-                sh 'go test ./... -v -short'
+                sh 'yarn test'
             }
         }
         stage('构建并推送镜像') {
@@ -31,12 +33,12 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-                sh "./cicd_script/deploy_image.sh ${params.namespace_name} ${params.deployment_name} ${params.container_name}"
-            }
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         echo 'Deploying....'
+        //         sh "./cicd_script/deploy_image.sh ${params.namespace_name} ${params.deployment_name} ${params.container_name}"
+        //     }
+        // }
     }
     post{
         always {

@@ -50,6 +50,7 @@ pipeline {
     post{
         always {
             echo '执行完毕'
+            deleteDir()
         }
         failure{
             echo '执行失败'

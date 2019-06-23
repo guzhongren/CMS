@@ -23,6 +23,8 @@ pipeline {
         }
         stage('Test') {
             steps {
+                sh 'ls -a'
+                cd 'CMS'
                 sh 'yarn test'
             }
         }

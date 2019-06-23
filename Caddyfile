@@ -1,14 +1,5 @@
-0.0.0.0:80
-root /www
-gzip
-log stdout
-errors stdout
-
-/api/ {
+0.0.0.0:80 {
   gzip
-  proxy / http://localhost:1234/ {
-    proxy_header Host {host}
-    proxy_header X-Real-IP {remote}
-    proxy_header X-Forwarded-Proto {scheme}
+  proxy / http://backend:1234/ {
   }
 }

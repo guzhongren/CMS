@@ -51,7 +51,7 @@
       "jest-canvas-mock"
     ],
     "setupFilesAfterEnv": ["./setupTests.ts"],
-    "testRegex": "\\.(test|spec)\\.(ts|tsx|jsx|js)$",
+    "testRegex": "\\.(__test__|test|spec)\\.(ts|tsx|jsx|js)$",
     "moduleNameMapper": {
       "\\.(less|scss|css|jpg|png|svg)$": "jest-css-modules",
       "^@config(.*)$": "<rootDir>/src/config$1",

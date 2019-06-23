@@ -22,9 +22,14 @@ pipeline {
                 sh 'yarn'
             }
         }
-        stage('Test') {
+        // stage('Test') {
+        //     steps {
+        //         sh 'yarn test'
+        //     }
+        // }
+        stage('Build') {
             steps {
-                sh 'yarn test'
+                sh 'yarn build'
             }
         }
         stage('构建并推送镜像') {

@@ -57,7 +57,7 @@ describe('HttpClient', () => {
     })
   })
   it('delete should return', () => {
-    mockAdapter.onDelete('/delete').replyOnce(200, mockResp)
+    mockAdapter.onDelete('/delete', mockParams).replyOnce(200, mockResp)
     return HttpClient.delete('/delete', mockParams).then(res => {
       expect(res).toEqual(mockResp.result)
     })

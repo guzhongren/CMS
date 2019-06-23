@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import './index.less'
 import { Modal, Form, Icon, Input, Button, message } from 'antd'
 import LoginAction from '@api/LogAction'
@@ -14,7 +14,7 @@ interface IStates {
   username?: string,
   password?: string
 }
-export default class LoginModal extends React.Component<IProps, IStates> {
+export default class LoginModal extends Component<IProps, IStates> {
   constructor(props: IProps) {
     super(props)
     this.state = {

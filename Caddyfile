@@ -4,9 +4,9 @@ gzip
 log stdout
 errors stdout
 
-/apiServer {
+/api/ {
   gzip
-  proxy / http://api.server.com/api {
+  proxy / http://localhost:1234/ {
     proxy_header Host {host}
     proxy_header X-Real-IP {remote}
     proxy_header X-Forwarded-Proto {scheme}

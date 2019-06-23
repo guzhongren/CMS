@@ -1,4 +1,4 @@
 FROM abiosoft/caddy
 LABEL maintainer="guzhongren@live.cn"
-COPY ./build/ /www
+COPY ./dist/ /www
 COPY Caddyfile /etc/Caddyfile

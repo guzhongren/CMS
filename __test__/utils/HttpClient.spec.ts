@@ -20,7 +20,7 @@ describe('HttpClient', () => {
   }
   const mockResp = {
     success: true,
-    data: {
+    result: {
       'test': 'test',
       'number': 1,
       'boolean': true,
@@ -41,25 +41,25 @@ describe('HttpClient', () => {
     // expect.assertions(1)
     expect(1).toEqual(1)
     return HttpClient.get('/users', mockParams).then(res => {
-      expect(res).toEqual(mockResp.data)
+      expect(res).toEqual(mockResp.result)
     })
   })
   it('post should return', () => {
     mockAdapter.onPost('/post').replyOnce(200, mockResp)
     return HttpClient.post('/post', mockParams).then(res => {
-      expect(res).toEqual(mockResp.data)
+      expect(res).toEqual(mockResp.result)
     })
   })
   it('put should return', () => {
     mockAdapter.onPut('/put').replyOnce(200, mockResp)
     return HttpClient.put('/put', {}).then(res => {
-      expect(res).toEqual(mockResp.data)
+      expect(res).toEqual(mockResp.result)
     })
   })
   it('delete should return', () => {
-    mockAdapter.onDelete('/delete').replyOnce(200, mockResp)
+    mockAdapter.onDelete('/delete', mockParams).replyOnce(200, mockResp)
     return HttpClient.delete('/delete', mockParams).then(res => {
-      expect(res).toEqual(mockResp.data)
+      expect(res).toEqual(mockResp.result)
     })
   })
   it('状态码测试失败', () => {

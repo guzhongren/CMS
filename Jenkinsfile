@@ -1,11 +1,11 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'hub_domain', defaultValue: 'hub.k8s.com', description: 'docker 私有仓库域')
-        string(name: 'project_name', defaultValue: 'cms', description: '项目名称')
-        string(name: 'namespace_name', defaultValue: 'cms', description: 'namespace名称')
-        string(name: 'deployment_name', defaultValue: 'frontend', description: 'deployment 名称')
-        string(name: 'container_name', defaultValue: 'frontend', description: '容器名称')
+    environment {
+        HUB_DOMAIN = 'hub.k8s.com' // 'docker 私有仓库域'
+        PROJECT_NAME = 'cms' // 项目名称
+        NAMESPACE_NAME = 'cms' // namespace名称
+        DEPLOYMENT_NAME = 'frontend' // deployment 名称
+        CONTAINER_NAME = 'frontend' // 容器名称
     }
     tools {nodejs "NodeJS 12.4.0"}
     stages {
@@ -36,14 +36,14 @@ pipeline {
             steps{
                 echo '开始构建镜像。。。'
                 withCredentials([usernamePassword(credentialsId: 'docker-register', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUser')]) {
-                    sh "./cicd_script/build_image.sh ${params.hub_domain} ${dockerUser} ${dockerPassword} ${params.project_name} ${params.container_name}"
+                    sh "./cicd_script/build_image.sh ${HUB_DOMAIN} ${dockerUser} ${dockerPassword} ${PROJECT_NAME} ${CONTAINER_NAME}"
                 }
             }
         }
         // stage('Deploy') {
         //     steps {
         //         echo 'Deploying....'
-        //         sh "./cicd_script/deploy_image.sh ${params.namespace_name} ${params.deployment_name} ${params.container_name}"
+        //         sh "./cicd_script/deploy_image.sh ${NAMESPACE_NAME} ${DEPLOYMENT_NAME} ${CONTAINER_NAME}"
         //     }
         // }
     }

@@ -92,3 +92,8 @@ import AjaxTest from '@components/Ajax'
 * Edge>=15
 * Chrome>=57
 * FireFox>=55
+
+
+## admin
+
+admin 000000
